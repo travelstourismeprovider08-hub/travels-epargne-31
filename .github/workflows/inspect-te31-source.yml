@@ -1,0 +1,18 @@
+name: Inspect T.E-31 source archive
+on:
+  push:
+    branches: [inspect-te31-source]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: List source files
+        run: unzip -l Travels_Epargne_Android_Project.zip
+      - name: Print Android activity
+        run: unzip -p Travels_Epargne_Android_Project.zip TravelsEpargneAndroid/app/src/main/java/com/travels/epargne/MainActivity.java
+      - name: Print app readme
+        run: unzip -p Travels_Epargne_Android_Project.zip TravelsEpargneAndroid/LISEZ-MOI.txt
