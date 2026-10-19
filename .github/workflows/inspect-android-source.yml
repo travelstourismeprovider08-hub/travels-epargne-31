@@ -1,0 +1,16 @@
+name: Inspect Android source temporarily
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/inspect-android-source.yml"]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print existing MainActivity for targeted edit
+        run: |
+          unzip -o Travels_Epargne_Android_Project.zip -d .
+          cat TravelsEpargneAndroid/app/src/main/java/com/travels/epargne/MainActivity.java
