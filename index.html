@@ -1213,8 +1213,8 @@ async function loadAdminClients() {
         <div class="admin-client-top"><div><b>${e31Escape(c.full_name || 'Client')}</b><div class="muted">${e31Escape(c.phone || 'Téléphone non renseigné')}</div></div><span class="tag">${active ? 'Actif' : 'Désactivé'}</span></div>
         <div class="muted" style="margin-top:6px">Solde : ${Number(c.balance || 0).toLocaleString('fr-FR')} F CFA</div>
         <div class="admin-actions" style="margin-top:10px">
-          <button type="button" class="secondary" onclick="openClientAccount('${e31Escape(c.id)}')">👁️ Accéder au compte</button>
-          <button type="button" class="secondary" onclick="resetClientPin('${e31Escape(c.id)}','${e31Escape(c.phone || '')}')">🔑 Réinitialiser le PIN</button>
+          <button type="button" style="background:#f28c28;color:#ffffff;border:1px solid #f28c28" onclick="openClientAccount('${e31Escape(c.id)}')">👁️ Accéder au compte</button>
+          <button type="button" style="background:#123a72;color:#f5c542;border:1px solid #f5c542" onclick="resetClientPin('${e31Escape(c.id)}','${e31Escape(c.phone || '')}')">🔑 Réinitialiser le PIN</button>
           <button type="button" style="background:${active ? '#b42318' : '#16703a'}" onclick="${active ? 'deleteClientAccount' : 'reactivateClientAccount'}('${e31Escape(c.id)}')">${active ? '🗑️ Supprimer le compte' : '↻ Réactiver le compte'}</button>
         </div>
       </article>`;
