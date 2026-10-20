@@ -773,6 +773,10 @@ $('clientLoginForm').addEventListener('submit', async function(event){
         $('dashboard').classList.add('hidden');
       }
       await loadAdminClients();
+      // Charger aussi les données d’épargne personnelles de l’administrateur
+      // depuis Supabase avant de terminer la connexion.
+      try { await loadClientDashboard(false); }
+      catch (dashboardError) { console.error('Chargement de l’épargne personnelle:', dashboardError); }
       window.scrollTo({top:0,behavior:'smooth'});
       return;
     }
