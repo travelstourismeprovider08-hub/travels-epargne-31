@@ -258,7 +258,7 @@ button.secondary{background:#f1f5fa;color:#24425f;border:1px solid #d8e3ef}
 </section>
 <div id="adminClientTools" class="card hidden">
   <h3 class="section-title">⚙️ Gestion des comptes clients</h3>
-  <p class="muted">Réinitialiser le PIN ou désactiver un compte client. L’historique financier est conservé.</p>
+  <p class="muted">Consultez les comptes clients, modifiez leurs informations de profil et d’objectif, réinitialisez le PIN ou désactivez un compte. L’historique financier est conservé.</p>
   <div class="row"><button type="button" class="secondary" onclick="loadAdminClients()">Actualiser la liste des clients</button><button type="button" class="secondary" onclick="adminLogout()">Déconnexion admin</button></div>
   <p id="adminClientStatus" class="muted" role="status"></p>
   <div id="adminClientList" class="admin-list"></div>
@@ -666,6 +666,7 @@ async function loadAdminClients() {
         <div class="admin-client-top"><div><b>${e31Escape(c.full_name || 'Client')}</b><div class="muted">${e31Escape(c.phone || 'Téléphone non renseigné')}</div></div><span class="tag">${active ? 'Actif' : 'Désactivé'}</span></div>
         <div class="muted" style="margin-top:6px">Solde : ${Number(c.balance || 0).toLocaleString('fr-FR')} F CFA</div>
         <div class="admin-actions" style="margin-top:10px">
+          <button type="button" class="secondary" onclick="editClientAccount('${e31Escape(c.id)}','${e31Escape(c.full_name || '')}','${e31Escape(c.phone || '')}',${Number(c.savings?.goal_amount || 0)},'${e31Escape(c.savings?.withdrawal_phone || c.phone || '')}')">✏️ Modifier le compte</button>
           <button type="button" class="secondary" onclick="resetClientPin('${e31Escape(c.id)}','${e31Escape(c.phone || '')}')">🔑 Réinitialiser le PIN</button>
           <button type="button" style="background:${active ? '#b42318' : '#16703a'}" onclick="${active ? 'deleteClientAccount' : 'reactivateClientAccount'}('${e31Escape(c.id)}')">${active ? '🗑️ Supprimer le compte' : '↻ Réactiver le compte'}</button>
         </div>
@@ -673,6 +674,47 @@ async function loadAdminClients() {
     }).join('');
     status.textContent = 'Liste actualisée : ' + data.clients.length + ' client(s).';
   } catch (err) { status.textContent = 'Erreur : ' + (err.message || 'chargement impossible'); }
+}
+async function editClientAccount(clientId, currentName, currentPhone, currentGoal, currentWithdrawalPhone) {
+  const fullName = prompt('Nom complet du client :', currentName);
+  if (fullName === null) return;
+  const phoneInput = prompt('Téléphone de connexion du client :', currentPhone);
+  if (phoneInput === null) return;
+  const goalInput = prompt('Nouvel objectif d’épargne en FCFA (sans espaces) :', String(currentGoal || ''));
+  if (goalInput === null) return;
+  const withdrawalInput = prompt('Numéro pour les retraits (laisser vide pour reprendre le téléphone de connexion) :', currentWithdrawalPhone || currentPhone);
+  if (withdrawalInput === null) return;
+
+  const clean = value => String(value || '').trim().replace(/[\\s().-]/g, '');
+  const normalize = value => {
+    const v = clean(value);
+    if (/^0[157][0-9]{8}$/.test(v)) return '+225' + v;
+    if (/^2250[157][0-9]{8}$/.test(v)) return '+' + v;
+    return v;
+  };
+  const phone = normalize(phoneInput);
+  const withdrawalPhone = normalize(withdrawalInput || phoneInput);
+  const goal = Number(String(goalInput).replace(/[\\s,]/g, ''));
+  if (String(fullName).trim().length < 2) { alert('Le nom complet doit contenir au moins 2 caractères.'); return; }
+  if (!/^\\+2250[157][0-9]{8}$/.test(phone)) { alert('Numéro de téléphone ivoirien invalide.'); return; }
+  if (!Number.isSafeInteger(goal) || goal < 500 || goal % 500 !== 0) { alert('L’objectif doit être un multiple de 500 FCFA.'); return; }
+  if (!/^\\+2250[157][0-9]{8}$/.test(withdrawalPhone)) { alert('Numéro de retrait ivoirien invalide.'); return; }
+  if (!confirm('Confirmer la modification des informations de ce compte client ? Le solde et l’historique des versements ne seront pas modifiés.')) return;
+
+  try {
+    const result = await e31AdminRequest({
+      action: 'admin_update_client_profile',
+      client_id: clientId,
+      full_name: String(fullName).trim(),
+      phone,
+      goal_amount: goal,
+      withdrawal_phone: withdrawalPhone
+    });
+    alert(result.message || 'Compte client mis à jour.');
+    await loadAdminClients();
+  } catch (err) {
+    alert('Modification impossible : ' + (err.message || 'erreur inconnue'));
+  }
 }
 async function resetClientPin(clientId, clientPhone) {
   const pin = prompt('Nouveau PIN (4 à 8 chiffres) pour ' + clientPhone + ' :');
