@@ -537,18 +537,18 @@ body > header{display:none!important;}
 <button class="secondary" id="refreshBalanceButton" onclick="refreshConfirmedBalance()" style="background:#0b1b35!important;color:#f5c542!important;border:1px solid #d4af37!important">Actualiser mon épargne</button>
 </div>
 
-<div class="card">
-<h3 class="section-title">👤 Mon profil</h3>
+<div class="card" id="te31ProfileCard" style="background:#123a72!important;color:#ffffff!important;border:1px solid #d4af37!important">
+<h3 class="section-title" style="color:#ffffff!important">👤 Mon profil</h3>
 <div class="profile-box">
 <img id="profilePhoto" class="avatar" alt="Photo de profil" src="">
 <div style="flex:1"><b id="profileName"></b><div class="muted" id="profilePhone"></div></div>
 </div>
-<label style="margin-top:12px">Ajouter / changer ma photo</label>
-<input id="photoInput" type="file" accept="image/*" onchange="savePhoto(event)">
+<label style="margin-top:12px;color:#ffffff!important">Ajouter / changer ma photo</label>
+<input id="photoInput" type="file" accept="image/*" onchange="savePhoto(event)" style="color:#ffffff!important;background:#0b1b35!important;border:1px solid #d4af37!important;border-radius:10px;padding:8px;max-width:100%">
 </div>
 
-<div class="card" id="te31GoalsCard">
-<h3 class="section-title">Votre plan</h3>
+<div class="card" id="te31GoalsCard" style="background:#123a72!important;color:#ffffff!important;border:1px solid #d4af37!important">
+<h3 class="section-title" style="color:#ffffff!important">Votre plan</h3>
 <div class="row">
 <div class="stat"><span class="muted">Versement quotidien</span><b id="dailyShow"></b></div>
 <div class="stat"><span class="muted">Jours restants</span><b id="daysLeft"></b></div>
