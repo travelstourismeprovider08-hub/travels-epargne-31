@@ -290,6 +290,33 @@ $('daily').addEventListener('change',updateGoal);
 
 function get(){return JSON.parse(localStorage.getItem('e31')||'null')}
 function save(x){localStorage.setItem('e31',JSON.stringify(x))}
+function buildAccountFromLogin(data,phone){
+  const savings=Array.isArray(data.savings)?data.savings[0]:null;
+  const previous=get();
+  const normalizePhone=value=>String(value||'').replace(/[\s().-]/g,'').replace(/^0(?=[157]\d{8}$)/,'+2250').replace(/^225/,'+225');
+  const samePrevious=!!previous&&(
+    (savings&&previous.id===savings.id)||
+    (normalizePhone(previous.phone)&&normalizePhone(previous.phone)===normalizePhone(data.profile?.phone||phone))
+  );
+  if(!savings){
+    if(samePrevious)return previous;
+    return null;
+  }
+  const serverPaid=Number(savings.opening_balance||0);
+  const serverDays=Number(savings.days_paid||0);
+  return {
+    ...(samePrevious?previous:{}),
+    id:savings.id,
+    name:data.profile?.full_name||previous?.name||'Client',
+    phone:data.profile?.phone||phone,
+    goal:Number(savings.goal_amount||previous?.goal||0),
+    daily:Number(savings.daily_amount||previous?.daily||0),
+    paid:serverPaid>0?serverPaid:(samePrevious?Number(previous.paid||0):0),
+    days:serverDays>0?serverDays:(samePrevious?Number(previous.days||0):0),
+    history:samePrevious&&Array.isArray(previous.history)?previous.history:[],
+    photo:samePrevious?(previous.photo||''):''
+  };
+}
 async function createAccount(){
   const name=$('name').value.trim();
   let phone=$('phone').value.trim().replace(/[\s().-]/g,'');
@@ -392,26 +419,22 @@ $('clientLoginForm').addEventListener('submit', async function(event){
     if(['admin','gerante'].includes(String(data.profile.role||''))){
       localStorage.setItem('e31_access_token',data.session.access_token);
       localStorage.setItem('e31_admin_profile',JSON.stringify(data.profile));
-      $('loginPanel').classList.add('hidden');
-      $('signup').classList.add('hidden');$('existingHero').classList.add('hidden');$('dashboard').classList.add('hidden');
+      const personalAccount=buildAccountFromLogin(data,phone);
+      $('loginPanel').classList.add('hidden');$('signup').classList.add('hidden');$('existingHero').classList.add('hidden');
       $('adminLoginCard').classList.add('hidden');$('adminClientTools').classList.remove('hidden');$('legacyManager').classList.remove('hidden');
+      if(personalAccount){
+        save(personalAccount);
+        render();
+      }else{
+        $('dashboard').classList.add('hidden');
+      }
       await loadAdminClients();
+      window.scrollTo({top:0,behavior:'smooth'});
       return;
     }
-    const savings=Array.isArray(data.savings)?data.savings[0]:null;
-    if(!savings) throw new Error('Aucun plan d’épargne trouvé pour ce compte. Contactez l’administration.');
+    const account=buildAccountFromLogin(data,phone);
+    if(!account) throw new Error('Aucun plan d’épargne trouvé pour ce compte. Contactez l’administration.');
     localStorage.setItem('e31_client_access_token',data.session.access_token);
-    const account={
-      id:savings.id,
-      name:data.profile.full_name||'Client',
-      phone:data.profile.phone||phone,
-      goal:Number(savings.goal_amount||0),
-      daily:Number(savings.daily_amount||0),
-      paid:Number(savings.opening_balance||0),
-      days:Number(savings.days_paid||0),
-      history:[],
-      photo:''
-    };
     save(account);
     $('loginPanel').classList.add('hidden');
     $('existingHero').classList.add('hidden');
@@ -709,9 +732,13 @@ async function reactivateClientAccount(clientId) {
   const token = localStorage.getItem('e31_access_token');
   if (token) {
     document.getElementById('loginPanel').classList.add('hidden');
+    document.getElementById('signup').classList.add('hidden');
+    document.getElementById('existingHero').classList.add('hidden');
     document.getElementById('adminLoginCard').classList.add('hidden');
     document.getElementById('adminClientTools').classList.remove('hidden');
     document.getElementById('legacyManager').classList.remove('hidden');
+    if(get()) render();
+    else document.getElementById('dashboard').classList.add('hidden');
     loadAdminClients();
   }
 })();
