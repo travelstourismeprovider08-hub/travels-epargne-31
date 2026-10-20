@@ -42,6 +42,7 @@ button.secondary{background:#f1f5fa;color:#24425f;border:1px solid #d8e3ef}
 .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.admin-grid .wide{grid-column:1/-1}.admin-list{display:grid;gap:10px;margin-top:14px}.admin-client{border:1px solid #e1e8f1;border-radius:14px;padding:13px;background:#fbfdff}.admin-client-top{display:flex;justify-content:space-between;gap:8px;align-items:start}.tag{font-size:11px;font-weight:800;border-radius:99px;padding:4px 8px;background:#fff0d8;color:#8a4b00}.admin-actions{display:flex;gap:8px;flex-wrap:wrap}.admin-actions button{width:auto;flex:1;min-width:110px}.admin-note{background:#fff8e9;border:1px solid #ffe2aa;border-radius:13px;padding:12px;font-size:13px;color:#70480c}
 @media(max-width:520px){.admin-grid{grid-template-columns:1fr}.admin-grid .wide{grid-column:auto}}
 
+body > header{display:none!important;}
 /* Écran de connexion T.E-31 — styles isolés pour préserver le reste de l'application */
 .login-page{background:#0b1b35;color:#fff;border:1px solid #263b58;border-radius:26px;padding:22px;margin:0 0 16px;box-shadow:0 16px 36px #0b1b3526}
 .login-brand{text-align:center;margin-bottom:18px}
@@ -71,11 +72,8 @@ button.secondary{background:#f1f5fa;color:#24425f;border:1px solid #d8e3ef}
 .login-page .login-register:hover{background:#132945}
 @media(max-width:520px){.login-page{padding:18px;border-radius:22px}.login-info,.login-promo{padding:13px}}
 
-
-/* Bouton d'inscription en haut de la page de connexion */
-.login-page .login-register-top{display:block;width:100%;margin:0 0 18px;background:#f58220;color:#fff;border:1px solid #f58220;box-shadow:0 7px 16px #f5822033;font-weight:900;text-align:center}
-.login-page .login-register-top:hover{background:#e97412;border-color:#e97412}
-
+ .login-page .login-register-top{display:block;width:100%;background:#f58220;color:#fff;border:1px solid #f58220;box-shadow:0 7px 16px #f5822033;font-weight:900;text-align:center;margin-top:10px}
+ .login-page .login-register-top:hover{background:#e97412;border-color:#e97412}
 </style>
 </head>
 <body>
@@ -121,16 +119,17 @@ button.secondary{background:#f1f5fa;color:#24425f;border:1px solid #d8e3ef}
     </div>
   </div>
   <p style="text-align:center;color:#aab8ca;font-size:12px;margin:15px 0 0">TRAVELS Épargne 31 — Chaque effort compte.</p>
+  
 </section>
 
 <section class="hero hidden" id="existingHero"><h2>🎯 31 jours pour avancer vers votre objectif</h2><p>Épargnez à votre rythme, suivez vos efforts et gardez votre objectif en vue, directement depuis votre téléphone.</p></section>
 <section id="signup" class="card hidden">
 <h2>📝 Créer mon compte T.E-31</h2>
 <p class="muted">Inscrivez-vous vous-même en quelques étapes pour commencer à suivre votre épargne.</p>
-<label for="name">Nom complet</label><input id="name" autocomplete="name" placeholder="Ex. Jean Kouamé" required>
-<label for="phone">Numéro de téléphone</label><input id="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="07XXXXXXXX ou +22507XXXXXXXX" required>
-<label for="pin">Code PIN (6 chiffres)</label><input id="pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="6" pattern="[0-9]{6}" placeholder="Choisissez 6 chiffres" required>
-<label for="daily">Cotisation quotidienne</label>
+<label>Nom complet</label><input id="name" placeholder="Ex. Jean Kouamé">
+<label>Numéro de téléphone</label><input id="phone" type="tel" autocomplete="tel" placeholder="07XXXXXXXX ou +22507XXXXXXXX">
+<label>Code PIN (6 chiffres)</label><input id="pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="6" placeholder="Choisissez 6 chiffres">
+<label>Cotisation quotidienne</label>
 <select id="daily">
 <option value="500">500 F</option>
 <option value="1000">1 000 F</option>
@@ -173,18 +172,16 @@ button.secondary{background:#f1f5fa;color:#24425f;border:1px solid #d8e3ef}
 <option value="19500">19 500 F</option>
 <option value="20000">20 000 F</option>
 </select>
-<label for="goal">Objectif d’épargne (FCFA)</label>
-<input id="goal" type="number" min="500" step="500" placeholder="Ex. 60 000" required>
-<label for="withdrawPhone">Numéro à utiliser pour votre retrait</label>
-<input id="withdrawPhone" type="tel" inputmode="tel" placeholder="Par défaut : votre numéro de téléphone">
-<p class="muted">Vous pouvez utiliser votre numéro de téléphone ou indiquer un autre numéro ivoirien.</p>
-<p id="signupStatus" class="login-status" role="status" aria-live="polite"></p>
-<button id="createAccountButton" type="button" onclick="createAccount()">CRÉER MON COMPTE</button>
-<button type="button" class="secondary" onclick="backToLogin()">Déjà inscrit(e) ? Retour à la connexion</button>
+<label>Objectif d’épargne</label>
+<input id="goal" type="number" min="500" step="500" placeholder="Ex. 100 000 F">
+<label>Numéro à utiliser pour votre retrait</label>
+<input id="withdrawPhone" type="tel" placeholder="Ex. 07 XX XX XX XX">
+<p class="muted">Laissez ce champ vide pour utiliser votre numéro de connexion.</p>
+<button onclick="createAccount()">CRÉER MON COMPTE</button>
 <small>La création du compte est gratuite. Aucun paiement n’est effectué lors de l’inscription.</small>
 </section>
 
-<div class="card" style="border-left:5px solid #f28c00;background:#fff8ed;">
+<div id="publicInfoCard" class="card hidden" style="border-left:5px solid #f28c00;background:#fff8ed;">
 <h3>📢 Informations importantes</h3>
 <p>💸 <b>Retrait du lundi au vendredi :</b> TRAVELS Epargne 31 effectue le dépôt directement sur le numéro choisi par le client. <b>Pas de retrait les samedis et dimanches.</b></p>
 <p>📞 <b>Contact officiel :</b> <a href="tel:0777362165" style="font-weight:800;color:#0b5ed7;">0777362165</a></p>
@@ -246,7 +243,7 @@ button.secondary{background:#f1f5fa;color:#24425f;border:1px solid #d8e3ef}
 </section>
 
 
-<section id="adminLoginCard" class="card">
+<section id="adminLoginCard" class="card hidden">
   <h3 class="section-title">🔐 Accès administration</h3>
   <p class="muted">Connexion réservée à l’administration pour gérer les comptes clients.</p>
   <label for="adminLoginPhone">Téléphone administrateur</label>
@@ -258,13 +255,13 @@ button.secondary{background:#f1f5fa;color:#24425f;border:1px solid #d8e3ef}
 </section>
 <div id="adminClientTools" class="card hidden">
   <h3 class="section-title">⚙️ Gestion des comptes clients</h3>
-  <p class="muted">Consultez les comptes clients, modifiez leurs informations de profil et d’objectif, réinitialisez le PIN ou désactivez un compte. L’historique financier est conservé.</p>
+  <p class="muted">Gérez les comptes clients, modifiez leurs informations, réinitialisez les PIN ou désactivez les comptes. L’historique financier est conservé.</p>
   <div class="row"><button type="button" class="secondary" onclick="loadAdminClients()">Actualiser la liste des clients</button><button type="button" class="secondary" onclick="adminLogout()">Déconnexion admin</button></div>
   <p id="adminClientStatus" class="muted" role="status"></p>
   <div id="adminClientList" class="admin-list"></div>
 </div>
 
-<section id="legacyManager" class="card">
+<section id="legacyManager" class="card hidden">
   <h2>📋 Reprise des anciennes cartes papier</h2>
   <p class="muted">Version 3 — registre de préparation des anciennes cartes papier, avec vérification du solde, suivi de progression et export CSV.</p>
   <div class="admin-note"><b>Important :</b> pour cette version, ces fiches sont enregistrées uniquement dans le navigateur de cet appareil. Elles ne sont pas encore synchronisées avec Supabase et ne constituent pas une preuve de paiement. Garde les cartes papier comme justificatifs.</div>
@@ -281,86 +278,74 @@ button.secondary{background:#f1f5fa;color:#24425f;border:1px solid #d8e3ef}
     </div>
     <button type="submit">➕ Enregistrer la fiche de reprise</button>
   </form>
-  <div class="row"><button type="button" class="secondary" onclick="exportLegacyCSV()">⬇️ Exporter les fiches CSV</button><button type="button" class="secondary" onclick="printLegacyList()">🖨️ async function createAccount(){
+  <div class="row"><button type="button" class="secondary" onclick="exportLegacyCSV()">⬇️ Exporter les fiches CSV</button><button type="button" class="secondary" onclick="printLegacyList()">🖨️ Imprimer la liste</button></div>
+  <div class="row" style="margin-top:12px"><div class="stat">Clients repris<b id="legacyCount">0</b></div><div class="stat">Total des soldes repris<b id="legacyTotal">0 F</b></div></div>
+  <div id="legacyList" class="admin-list"></div>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+function updateGoal(){ }
+$('daily').addEventListener('change',updateGoal);
+
+function get(){return JSON.parse(localStorage.getItem('e31')||'null')}
+function save(x){localStorage.setItem('e31',JSON.stringify(x))}
+async function createAccount(){
   const name=$('name').value.trim();
-  let phone=$('phone').value.trim().replace(/[\\s().-]/g,'');
+  let phone=$('phone').value.trim().replace(/[\s().-]/g,'');
   const pin=$('pin').value.trim();
-  const daily=Number($('daily').value);
   const goal=Number($('goal').value);
-  const status=$('signupStatus');
-  const button=$('createAccountButton');
-  const say=(message)=>{status.textContent=message;};
-  say('');
 
-  if(name.length<2){say('Veuillez saisir votre nom complet.');$('name').focus();return;}
-  if(/^0[157][0-9]{8}$/.test(phone)) phone='+225'+phone;
-  if(!/^\\+2250[157][0-9]{8}$/.test(phone)){
-    say('Entrez un numéro ivoirien valide, par exemple 0700000000 ou +2250700000000.');
-    $('phone').focus();return;
-  }
-  if(!/^[0-9]{6}$/.test(pin)){say('Votre code PIN doit contenir exactement 6 chiffres.');$('pin').focus();return;}
-  if(!Number.isInteger(daily)||daily<500||daily>20000||daily%500!==0){
-    say('Choisissez une cotisation comprise entre 500 et 20 000 FCFA, par pas de 500.');$('daily').focus();return;
-  }
-  if(!Number.isInteger(goal)||goal<daily||goal%500!==0){
-    say('Votre objectif doit être un multiple de 500 FCFA et au moins égal à votre cotisation quotidienne.');$('goal').focus();return;
-  }
-  let withdrawalPhone=$('withdrawPhone').value.trim().replace(/[\\s().-]/g,'');
-  if(!withdrawalPhone) withdrawalPhone=phone;
-  else if(/^0[157][0-9]{8}$/.test(withdrawalPhone)) withdrawalPhone='+225'+withdrawalPhone;
-  if(!/^\\+2250[157][0-9]{8}$/.test(withdrawalPhone)){
-    say('Entrez un numéro ivoirien valide pour les retraits, ou laissez ce champ vide pour utiliser votre numéro de connexion.');
-    $('withdrawPhone').focus();return;
-  }
+  if(!name){alert('Veuillez entrer votre nom complet.');$('name').focus();return;}
 
-  button.disabled=true;button.textContent='CRÉATION DU COMPTE…';
-  try{
-    const response=await fetch('https://rmrzjnieuefdnqrxpjcn.supabase.co/functions/v1/smart-handler',{
+  // Accepte les 10 chiffres ivoiriens (01/05/07...) ou +225 suivi de ces 10 chiffres.
+  if(/^0[157][0-9]{8}$/.test(phone)){
+    phone='+225'+phone;
+  } else if(/^\+2250[157][0-9]{8}$/.test(phone)){
+    // Déjà au format international : on le conserve.
+  } else {
+    alert('Entrez un numéro ivoirien valide : 0100000000, 0500000000 ou 0700000000, ou le même numéro précédé de +225.');
+    $('phone').focus();
+    return;
+  }
+  if(!/^[0-9]{6}$/.test(pin)){alert('Le code PIN doit contenir exactement 6 chiffres.');$('pin').focus();return;}
+  if(!goal || goal <= 0){alert('Veuillez entrer votre objectif d’épargne.');$('goal').focus();return;}
+
+  const button=$('signup').querySelector('button');
+  button.disabled=true;
+  button.textContent='Connexion à Supabase…';
+  try {
+    const response=await fetch('https://rmrzjnieuefdnqrxpjcn.supabase.co/functions/v1/smart-handler', {
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':'sb_publishable_7wuwoi_p6C4_xnITBLsOxA_6b6PDDbm'},
-      body:JSON.stringify({action:'register',full_name:name,phone,pin,daily_amount:daily,goal_amount:goal,withdrawal_phone:withdrawalPhone})
+      body:JSON.stringify({
+        action:'register',
+        full_name:name,
+        phone,
+        pin,
+        daily_amount:Number($('daily').value),
+        goal_amount:goal,
+        withdrawal_phone:(()=>{
+          let w=$('withdrawPhone').value.trim().replace(/[\s().-]/g,'');
+          if(/^0[157][0-9]{8}$/.test(w)) w='+225'+w;
+          return w || phone;
+        })()
+      })
     });
     const result=await response.json().catch(()=>({}));
-    if(!response.ok) throw new Error(result.error||'La création du compte a échoué. Veuillez réessayer.');
-    if(result.session?.access_token&&result.profile){
-      const savings=Array.isArray(result.savings)?result.savings[0]:null;
-      if(!savings) throw new Error('Votre profil a été créé, mais le plan d’épargne est introuvable. Contactez l’administration avant de recommencer l’inscription.');
-      localStorage.setItem('e31_client_access_token',result.session.access_token);
-      const account={
-        id:savings.id,
-        name:result.profile.full_name||name,
-        phone:result.profile.phone||phone,
-        goal:Number(savings.goal_amount||goal),
-        daily:Number(savings.daily_amount||daily),
-        paid:Number(savings.opening_balance||0),
-        days:Number(savings.days_paid||0),
-        history:[],
-        photo:''
-      };
-      save(account);
-      $('signup').classList.add('hidden');
-      $('loginPanel').classList.add('hidden');
-      $('existingHero').classList.add('hidden');
-      render();
-      window.scrollTo({top:0,behavior:'smooth'});
-      return;
+    if(!response.ok) {
+      const parts = [
+        result.error || 'Erreur Supabase',
+        result.details ? 'Détails : ' + result.details : '',
+        result.code ? 'Code : ' + result.code : '',
+        result.hint ? 'Indice : ' + result.hint : '',
+        'HTTP : ' + response.status
+      ].filter(Boolean);
+      throw new Error(parts.join('\\n'));
     }
-    if(result.error&&response.status!==201) throw new Error(result.error);
-    say('Votre compte a peut-être été créé. Connectez-vous avec votre numéro et votre PIN pour vérifier avant de refaire une inscription.');
-    $('loginPhone').value=phone;
-    $('loginPin').value='';
-    $('signup').classList.add('hidden');
-    $('existingHero').classList.add('hidden');
-    $('loginPanel').classList.remove('hidden');
-    $('loginStatus').textContent=result.error||'Inscription enregistrée. Connectez-vous avec votre numéro et votre PIN.';
-    window.scrollTo({top:0,behavior:'smooth'});
-  }catch(error){
-    say(error.message||'Impossible de créer le compte pour le moment. Réessayez.');
-  }finally{
-    button.disabled=false;button.textContent='CRÉER MON COMPTE';
-  }
-}
-)+
+    alert((result.message || 'Réponse reçue de Supabase.')+
+      '\n\nProfil : '+(result.profile?.full_name || name)+
+      '\nNuméro : '+(result.profile?.phone || phone)+
       '\n\nVérifie la réponse du serveur : le plan d’épargne doit apparaître dans la réponse pour confirmer son enregistrement. Aucun paiement réel n’est activé.');
   } catch(error) {
     console.error(error);
@@ -376,16 +361,7 @@ function showRegistration(){
   $('loginPanel').classList.add('hidden');
   $('existingHero').classList.remove('hidden');
   $('signup').classList.remove('hidden');
-  $('signupStatus').textContent='';
   $('name').focus();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function backToLogin(){
-  $('signup').classList.add('hidden');
-  $('existingHero').classList.add('hidden');
-  $('loginPanel').classList.remove('hidden');
-  $('loginStatus').textContent='';
-  $('loginPhone').focus();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 $('clientLoginForm').addEventListener('submit', async function(event){
@@ -417,8 +393,8 @@ $('clientLoginForm').addEventListener('submit', async function(event){
       localStorage.setItem('e31_access_token',data.session.access_token);
       localStorage.setItem('e31_admin_profile',JSON.stringify(data.profile));
       $('loginPanel').classList.add('hidden');
-      $('adminLoginCard').classList.add('hidden');
-      $('adminClientTools').classList.remove('hidden');
+      $('signup').classList.add('hidden');$('existingHero').classList.add('hidden');$('dashboard').classList.add('hidden');
+      $('adminLoginCard').classList.add('hidden');$('adminClientTools').classList.remove('hidden');$('legacyManager').classList.remove('hidden');
       await loadAdminClients();
       return;
     }
@@ -631,7 +607,9 @@ function adminLogout() {
   localStorage.removeItem('e31_access_token');
   localStorage.removeItem('e31_admin_profile');
   document.getElementById('adminClientTools').classList.add('hidden');
-  document.getElementById('adminLoginCard').classList.remove('hidden');
+  document.getElementById('legacyManager').classList.add('hidden');
+  document.getElementById('adminLoginCard').classList.add('hidden');
+  document.getElementById('loginPanel').classList.remove('hidden');
   document.getElementById('adminClientList').innerHTML = '';
   document.getElementById('adminClientStatus').textContent = '';
   document.getElementById('adminLoginPin').value = '';
@@ -675,46 +653,21 @@ async function loadAdminClients() {
     status.textContent = 'Liste actualisée : ' + data.clients.length + ' client(s).';
   } catch (err) { status.textContent = 'Erreur : ' + (err.message || 'chargement impossible'); }
 }
-async function editClientAccount(clientId, currentName, currentPhone, currentGoal, currentWithdrawalPhone) {
-  const fullName = prompt('Nom complet du client :', currentName);
-  if (fullName === null) return;
-  const phoneInput = prompt('Téléphone de connexion du client :', currentPhone);
-  if (phoneInput === null) return;
-  const goalInput = prompt('Nouvel objectif d’épargne en FCFA (sans espaces) :', String(currentGoal || ''));
-  if (goalInput === null) return;
-  const withdrawalInput = prompt('Numéro pour les retraits (laisser vide pour reprendre le téléphone de connexion) :', currentWithdrawalPhone || currentPhone);
-  if (withdrawalInput === null) return;
-
-  const clean = value => String(value || '').trim().replace(/[\\s().-]/g, '');
-  const normalize = value => {
-    const v = clean(value);
-    if (/^0[157][0-9]{8}$/.test(v)) return '+225' + v;
-    if (/^2250[157][0-9]{8}$/.test(v)) return '+' + v;
-    return v;
-  };
-  const phone = normalize(phoneInput);
-  const withdrawalPhone = normalize(withdrawalInput || phoneInput);
-  const goal = Number(String(goalInput).replace(/[\\s,]/g, ''));
-  if (String(fullName).trim().length < 2) { alert('Le nom complet doit contenir au moins 2 caractères.'); return; }
-  if (!/^\\+2250[157][0-9]{8}$/.test(phone)) { alert('Numéro de téléphone ivoirien invalide.'); return; }
-  if (!Number.isSafeInteger(goal) || goal < 500 || goal % 500 !== 0) { alert('L’objectif doit être un multiple de 500 FCFA.'); return; }
-  if (!/^\\+2250[157][0-9]{8}$/.test(withdrawalPhone)) { alert('Numéro de retrait ivoirien invalide.'); return; }
-  if (!confirm('Confirmer la modification des informations de ce compte client ? Le solde et l’historique des versements ne seront pas modifiés.')) return;
-
-  try {
-    const result = await e31AdminRequest({
-      action: 'admin_update_client_profile',
-      client_id: clientId,
-      full_name: String(fullName).trim(),
-      phone,
-      goal_amount: goal,
-      withdrawal_phone: withdrawalPhone
-    });
-    alert(result.message || 'Compte client mis à jour.');
-    await loadAdminClients();
-  } catch (err) {
-    alert('Modification impossible : ' + (err.message || 'erreur inconnue'));
-  }
+async function editClientAccount(clientId,currentName,currentPhone,currentGoal,currentWithdrawalPhone){
+  const fullName=prompt('Nom complet du client :',currentName);if(fullName===null)return;
+  const phoneInput=prompt('Téléphone de connexion :',currentPhone);if(phoneInput===null)return;
+  const goalInput=prompt('Objectif d’épargne en FCFA :',String(currentGoal||''));if(goalInput===null)return;
+  const withdrawalInput=prompt('Numéro de retrait (laisser vide pour reprendre le téléphone de connexion) :',currentWithdrawalPhone||currentPhone);if(withdrawalInput===null)return;
+  const clean=value=>String(value||'').trim().replace(/[\s().-]/g,'');
+  const normalize=value=>{const v=clean(value);if(/^0[157][0-9]{8}$/.test(v))return '+225'+v;if(/^2250[157][0-9]{8}$/.test(v))return '+'+v;return v;};
+  const phone=normalize(phoneInput),withdrawalPhone=normalize(withdrawalInput||phoneInput),goal=Number(String(goalInput).replace(/[\s,]/g,''));
+  if(String(fullName).trim().length<2){alert('Le nom complet doit contenir au moins 2 caractères.');return;}
+  if(!/^\+2250[157][0-9]{8}$/.test(phone)){alert('Numéro de téléphone ivoirien invalide.');return;}
+  if(!Number.isSafeInteger(goal)||goal<500||goal%500!==0){alert('L’objectif doit être un multiple de 500 FCFA.');return;}
+  if(!/^\+2250[157][0-9]{8}$/.test(withdrawalPhone)){alert('Numéro de retrait ivoirien invalide.');return;}
+  if(!confirm('Confirmer la modification ? Le solde et l’historique financier resteront inchangés.'))return;
+  try{const result=await e31AdminRequest({action:'admin_update_client_profile',client_id:clientId,full_name:String(fullName).trim(),phone,goal_amount:goal,withdrawal_phone:withdrawalPhone});alert(result.message||'Compte client mis à jour.');await loadAdminClients();}
+  catch(err){alert('Modification impossible : '+(err.message||'erreur inconnue'));}
 }
 async function resetClientPin(clientId, clientPhone) {
   const pin = prompt('Nouveau PIN (4 à 8 chiffres) pour ' + clientPhone + ' :');
@@ -755,8 +708,10 @@ async function reactivateClientAccount(clientId) {
 (function restoreAdminSession(){
   const token = localStorage.getItem('e31_access_token');
   if (token) {
+    document.getElementById('loginPanel').classList.add('hidden');
     document.getElementById('adminLoginCard').classList.add('hidden');
     document.getElementById('adminClientTools').classList.remove('hidden');
+    document.getElementById('legacyManager').classList.remove('hidden');
     loadAdminClients();
   }
 })();
