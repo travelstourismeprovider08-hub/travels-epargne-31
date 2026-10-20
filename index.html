@@ -1459,17 +1459,40 @@ async function reactivateClientAccount(clientId) {
 <script>
 (function restoreAdminSession(){
   const token = localStorage.getItem('e31_access_token');
-  if (token) {
-    document.getElementById('loginPanel').classList.add('hidden');
-    document.getElementById('signup').classList.add('hidden');
-    document.getElementById('existingHero').classList.add('hidden');
+  const hideAdminPanels = () => {
     document.getElementById('adminLoginCard').classList.add('hidden');
-    document.getElementById('adminClientTools').classList.remove('hidden');
-    document.getElementById('legacyManager').classList.remove('hidden');
-    if(get()) render();
-    else document.getElementById('dashboard').classList.add('hidden');
-    loadAdminClients();
-  }
+    document.getElementById('adminClientTools').classList.add('hidden');
+    document.getElementById('legacyManager').classList.add('hidden');
+  };
+  hideAdminPanels();
+  if (!token) return;
+
+  // Ne jamais afficher l’espace d’administration sur la page client
+  // avant d’avoir vérifié que la session administrateur est encore valide.
+  (async () => {
+    try {
+      const data = await e31AdminRequest({ action: 'get_dashboard' });
+      if (!data.admin || !Array.isArray(data.clients)) {
+        throw new Error('Session administrateur invalide.');
+      }
+      document.getElementById('loginPanel').classList.add('hidden');
+      document.getElementById('signup').classList.add('hidden');
+      document.getElementById('existingHero').classList.add('hidden');
+      document.getElementById('adminLoginCard').classList.add('hidden');
+      document.getElementById('adminClientTools').classList.remove('hidden');
+      document.getElementById('legacyManager').classList.remove('hidden');
+      if(get()) render();
+      else document.getElementById('dashboard').classList.add('hidden');
+      await loadAdminClients();
+    } catch (error) {
+      localStorage.removeItem('e31_access_token');
+      localStorage.removeItem('e31_admin_profile');
+      hideAdminPanels();
+      document.getElementById('loginPanel').classList.remove('hidden');
+      document.getElementById('adminClientStatus').textContent = '';
+      document.getElementById('adminClientList').innerHTML = '';
+    }
+  })();
 })();
 </script>
 
