@@ -422,17 +422,7 @@ document.getElementById('legacyForm').addEventListener('submit',async e=>{
 function editLegacy(id){const items=getLegacy(),x=items.find(a=>a.id===id);if(!x)return;const name=prompt('Nom du client :',x.name);if(name===null)return;const paid=prompt('Total déjà versé vérifié (F CFA) :',String(x.paid));if(paid===null)return;const amount=Number(paid);if(!name.trim()||!Number.isFinite(amount)||amount<0){alert('Valeur invalide.');return;}x.name=name.trim();x.paid=amount;saveLegacy(items)}
 function deleteLegacy(id){if(!confirm('Supprimer cette fiche de reprise de cet appareil ?'))return;saveLegacy(getLegacy().filter(x=>x.id!==id))}
 function exportLegacyCSV(){const items=getLegacy();if(!items.length){alert('Aucune fiche à exporter.');return;}const rows=[['Nom','Téléphone','Cotisation quotidienne','Objectif','Solde repris','Note','Date de création'],...items.map(x=>[x.name,x.phone,x.daily,x.goal,x.paid,x.note,x.createdAt])];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));const a=document.createElement('a');a.href=url;a.download='TRAVELS_Epargne_31_reprise_cartes.csv';a.click();URL.revokeObjectURL(url)}
-function printLegacyList(){const items=getLegacy();if(!items.length){alert('Aucune fiche à imprimer.');return;}const w=window.open('','_blank');if(!w){alert('Autorise les fenêtres pop-up pour imprimer.');return;}w.document.write('<html lang="fr"><meta charset="utf-8"><title>Reprise des cartes papier</title><body style="font-family:Arial;padding:20px"><h1>TRAVELS Épargne 31 — Reprise cartes papier</h1><p>Document de travail — vérifier avec les cartes originales.</p><table border="1" cellspacing="0" cellpadding="8"><tr><th>Client</th><th>Téléphone</th><th>Quotidien</th><th>Objectif</th><th>Solde repris</th><th>Note</th></tr>'+items.map(x=>'<tr><td>'+escapeLegacy(x.name)+'</td><td>'+escapeLegacy(x.phone)+'</td><td>'+fmtF(x.daily)+'</td><td>'+fmtF(x.goal)+'</td><td>'+fmtF(x.paid)+'</td><td>'+escapeLegacy(x.note)+'</td></tr>').join('')+'</table><script>window.onload=()=>window.print()<\/script><script>
-(function restoreAdminSession(){
-  const token = localStorage.getItem('e31_access_token');
-  if (token) {
-    document.getElementById('adminLoginCard').classList.add('hidden');
-    document.getElementById('adminClientTools').classList.remove('hidden');
-    loadAdminClients();
-  }
-})();
-</script>
-</body></html>');w.document.close()}
+function printLegacyList(){const items=getLegacy();if(!items.length){alert('Aucune fiche à imprimer.');return;}const w=window.open('','_blank');if(!w){alert('Autorise les fenêtres pop-up pour imprimer.');return;}w.document.write('<html lang="fr"><meta charset="utf-8"><title>Reprise des cartes papier</title><body style="font-family:Arial;padding:20px"><h1>TRAVELS Épargne 31 — Reprise cartes papier</h1><p>Document de travail — vérifier avec les cartes originales.</p><table border="1" cellspacing="0" cellpadding="8"><tr><th>Client</th><th>Téléphone</th><th>Quotidien</th><th>Objectif</th><th>Solde repris</th><th>Note</th></tr>'+items.map(x=>'<tr><td>'+escapeLegacy(x.name)+'</td><td>'+escapeLegacy(x.phone)+'</td><td>'+fmtF(x.daily)+'</td><td>'+fmtF(x.goal)+'</td><td>'+fmtF(x.paid)+'</td><td>'+escapeLegacy(x.note)+'</td></tr>').join('')+'</table><script>window.onload=()=>window.print()<\/script></body></html>');w.document.close()}
 
 </script>
 
@@ -549,4 +539,14 @@ async function reactivateClientAccount(clientId) {
 
 </script>
 
+<script>
+(function restoreAdminSession(){
+  const token = localStorage.getItem('e31_access_token');
+  if (token) {
+    document.getElementById('adminLoginCard').classList.add('hidden');
+    document.getElementById('adminClientTools').classList.remove('hidden');
+    loadAdminClients();
+  }
+})();
+</script>
 </body></html>
