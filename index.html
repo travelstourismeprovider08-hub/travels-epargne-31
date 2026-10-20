@@ -321,7 +321,7 @@ async function createAccount(){
         daily_amount:Number($('daily').value),
         goal_amount:goal,
         withdrawal_phone:(()=>{
-          let w=$('withdrawPhone').value.trim().replace(/[\\s().-]/g,'');
+          let w=$('withdrawPhone').value.trim().replace(/[\s().-]/g,'');
           if(/^0[157][0-9]{8}$/.test(w)) w='+225'+w;
           return w || phone;
         })()
@@ -366,7 +366,7 @@ $('clientLoginForm').addEventListener('submit', async function(event){
   let phone=$('loginPhone').value.trim().replace(/[\\s().-]/g,'');
   const pin=$('loginPin').value.trim();
   if(/^0[157][0-9]{8}$/.test(phone)) phone='+225'+phone;
-  if(!/^\\+2250[157][0-9]{8}$/.test(phone)){
+  if(!/^\+2250[157][0-9]{8}$/.test(phone)){
     status.textContent='Entrez un numéro ivoirien valide, par exemple 07XXXXXXXX.';
     $('loginPhone').focus(); return;
   }
