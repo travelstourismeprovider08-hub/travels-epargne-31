@@ -150,7 +150,8 @@ body > header{display:none!important;}
 .te31-nav-item span{font-size:19px;line-height:1.1;color:#d4af37}
 .te31-nav-item.active{color:#ff9418;background:#ffffff0d;border-radius:12px}.te31-nav-item.active span{color:#ff9418}
 #te31AccountPanel{scroll-margin-top:16px}
-#legacyHistoryCard{display:none!important}
+#legacyHistoryCard,#legacyWithdrawCard,#resetDemoButton{display:none!important}
+#dashboard > .dashboard-top,#dashboard > .row{display:none!important}
 @media(min-width:650px){.te31-action-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.te31-action{min-height:105px;flex-direction:column;align-items:flex-start}.te31-action-icon{flex-basis:42px}}
 @media(max-width:420px){.te31-balance{padding:18px}.te31-mini-links button{font-size:11px}.te31-operation{grid-template-columns:34px minmax(0,1fr) auto;gap:8px;padding:10px}.te31-op-right{min-width:78px}.te31-op-right strong{font-size:12px}.te31-op-main b{font-size:12px}.te31-action{padding:12px;gap:9px}.te31-action-icon{flex-basis:36px;height:36px;font-size:19px}}
 
@@ -270,7 +271,7 @@ body > header{display:none!important;}
 <div id="logoutBar" style="display:flex;justify-content:flex-end;position:static;margin:0 0 12px;padding:4px 0;">
 <div class="te31-topbar" id="te31Home">
   <div class="te31-brand"><div class="te31-mark" aria-label="Logo Travels Épargne 31">TE</div><div><strong>TRAVELS Épargne 31</strong><small>Épargner aujourd'hui pour voyager demain</small></div></div>
-  <div class="te31-top-actions"><button type="button" class="te31-icon-btn" onclick="openHistory('deposits')" aria-label="Notifications" title="Notifications">♧</button><button type="button" class="te31-icon-btn" onclick="goToAccount()" aria-label="Mon profil" title="Mon profil">👤</button></div>
+  <div class="te31-top-actions"><button type="button" class="te31-icon-btn" onclick="openHistory('deposits')" aria-label="Notifications" title="Notifications">🔔</button><button type="button" class="te31-icon-btn" onclick="goToAccount()" aria-label="Mon profil" title="Mon profil">👤</button></div>
 </div>
 <section class="te31-balance" aria-label="Solde de mon épargne">
   <div class="te31-wallet" aria-hidden="true">▣</div><div class="te31-flight-lines" aria-hidden="true"></div>
@@ -357,7 +358,7 @@ body > header{display:none!important;}
 <button onclick="pay()">💳 Effectuer mon versement</button>
 </div>
 
-<div class="card withdraw">
+<div id="legacyWithdrawCard" class="card withdraw">
 <h3>💸 Retrait</h3>
 <p id="withdrawText" class="muted">Vous pourrez signaler votre demande de retrait 2 jours à l’avance.</p>
 <button class="secondary" onclick="signalWithdraw()">📢 Signaler mon retrait</button>
@@ -366,7 +367,7 @@ body > header{display:none!important;}
 <div id="legacyHistoryCard" class="card"><h3 class="section-title">Historique des versements</h3><div id="history"></div></div>
 
 
-<button class="secondary" onclick="resetDemo()">Réinitialiser le prototype</button>
+<button id="resetDemoButton" class="secondary" onclick="resetDemo()">Réinitialiser le prototype</button>
 </section>
 
 
