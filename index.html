@@ -90,6 +90,70 @@ body > header{display:none!important;}
 /* Bouton d’actualisation : bleu marine et jaune or, sans modifier sa fonction */
 #refreshBalanceButton{background:#0b1b35!important;color:#d4af37!important;border:1px solid #d4af37!important;box-shadow:0 6px 14px #0b1b3526!important;font-weight:900}
 #refreshBalanceButton:hover{background:#132945!important;color:#f1d56a!important}
+
+/* T.E-31 — tableau de bord bancaire intégré, sans remplacer les fonctions existantes */
+#dashboard{padding-bottom:88px}
+.te31-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px 16px}
+.te31-brand{display:flex;align-items:center;gap:11px;min-width:0}
+.te31-mark{display:grid;place-items:center;flex:0 0 48px;height:48px;border-radius:15px;background:linear-gradient(145deg,#f58220,#ffad37);color:#0b1b35;font-weight:1000;font-size:19px;border:1px solid #d4af37;box-shadow:0 6px 15px #0b1b3524}
+.te31-brand strong{display:block;color:#0b1b35;font-size:17px;line-height:1.2}
+.te31-brand small{display:block;color:#64748b;font-size:11px;line-height:1.4;margin-top:4px}
+.te31-top-actions{display:flex;gap:8px}
+.te31-icon-btn{width:42px;height:42px;min-height:42px;margin:0;padding:0;display:grid;place-items:center;border-radius:14px;background:#0b1b35;color:#d4af37;border:1px solid #d4af37;box-shadow:none;font-size:19px}
+.te31-balance{position:relative;overflow:hidden;margin:0 0 15px;padding:22px;border-radius:25px;background:radial-gradient(circle at 90% 12%,#203b60 0,transparent 32%),linear-gradient(135deg,#0b1b35,#132945 68%,#1c3554);color:#fff;box-shadow:0 16px 30px #0b1b3528;border:1px solid #d4af3752}
+.te31-balance:after{content:"✈";position:absolute;right:20px;top:50px;color:#d4af37;font-size:28px;opacity:.8;transform:rotate(-12deg);pointer-events:none}
+.te31-flight-lines{position:absolute;right:-20px;top:90px;width:150px;height:70px;border:1px solid #d4af3766;border-left:0;border-radius:50%;transform:rotate(-22deg);pointer-events:none}
+.te31-balance-label{font-size:13px;color:#dbe5f1;font-weight:700}
+.te31-balance-amount{font-size:clamp(30px,7vw,40px);font-weight:950;letter-spacing:-.8px;line-height:1.25;margin:8px 0 4px;overflow-wrap:anywhere;color:#fff}
+.te31-balance-foot{font-size:12px;color:#c8d4e4}
+.te31-wallet{position:absolute;right:20px;top:18px;font-size:24px;color:#d4af37}
+.te31-mini-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:20px;position:relative;z-index:1}
+.te31-mini-links button{min-height:42px;margin:0;padding:9px 5px;background:#ffffff10;color:#fff;border:1px solid #ffffff35;box-shadow:none;font-size:12px}
+.te31-mini-links button span{color:#d4af37;margin-right:3px}
+.te31-action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:15px 0}
+.te31-action{display:flex;align-items:center;gap:12px;text-align:left;min-height:80px;margin:0;padding:15px;background:linear-gradient(135deg,#f58220,#ff9418);color:#fff;border:1px solid #e9a34a;box-shadow:0 9px 17px #f5822025;border-radius:18px}
+.te31-action-icon{display:grid;place-items:center;flex:0 0 42px;height:42px;border-radius:13px;background:#ffffff25;color:#fff;font-size:22px}
+.te31-action b{display:block;font-size:14px;line-height:1.25}
+.te31-action small{display:block;color:#fff;opacity:.92;font-size:11px;margin-top:4px}
+.te31-history{margin-top:18px;padding:19px;border:1px solid #e4eaf2;border-radius:24px;background:#fff;box-shadow:0 8px 22px #0b1b350b}
+.te31-section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.te31-section-heading h3{margin:0;color:#0b1b35;font-size:21px}
+.te31-section-heading p{margin:4px 0 0;color:#718096;font-size:12px}
+.te31-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0}
+.te31-tab{margin:0;padding:11px 8px;min-height:46px;background:#0b1b35;color:#fff;border:1px solid #263b58;box-shadow:none;font-size:12px}
+.te31-tab.active{background:#f58220;color:#fff;border-color:#f58220;box-shadow:0 5px 12px #f5822033}
+.te31-history-total{border-radius:18px;padding:16px;background:linear-gradient(120deg,#f58220,#ff9418);color:#fff;margin-bottom:13px}
+.te31-history-total.navy{background:linear-gradient(135deg,#0b1b35,#193553)}
+.te31-history-total small{display:block;color:#fff;opacity:.9;font-size:12px}
+.te31-history-total strong{display:block;color:#fff;font-size:23px;font-weight:950;margin-top:4px}
+.te31-history-list{display:grid;gap:9px}
+.te31-operation{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px;border:1px solid #e8edf4;border-radius:15px;background:#fff}
+.te31-op-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#e5f8ed;color:#159447;font-weight:950;font-size:18px}
+.te31-op-icon.withdraw{background:#fff0df;color:#f58220}
+.te31-op-main{min-width:0}
+.te31-op-main b{display:block;color:#172b45;font-size:13px;overflow-wrap:anywhere}
+.te31-op-main small{display:block;color:#718096;font-size:11px;overflow-wrap:anywhere}
+.te31-op-right{text-align:right;min-width:88px}
+.te31-op-right strong{display:block;font-size:13px;color:#159447;white-space:nowrap}
+.te31-op-right strong.withdraw{color:#f58220}
+.te31-status{display:inline-block;margin-top:3px;padding:3px 7px;border-radius:20px;background:#eef2f7;color:#475569;font-size:10px;font-weight:800}
+.te31-status.ok{background:#e6f8ed;color:#167442}.te31-status.wait{background:#fff3d8;color:#9a5a00}.te31-status.bad{background:#ffe7e7;color:#a61b1b}
+.te31-empty{padding:20px 12px;text-align:center;border:1px dashed #d8e1ec;border-radius:14px;color:#718096;font-size:13px}
+.te31-rules{margin:14px 0 0;padding:16px;border:1px solid #d4af3766;border-radius:18px;background:#0b1b35;color:#fff;font-size:13px}
+.te31-rules b{display:block;color:#d4af37;margin-bottom:8px}.te31-rules p{margin:6px 0}
+.te31-form-panel{margin:14px 0;padding:18px;border-radius:20px;border:1px solid #d4af3766;background:#fff}
+.te31-form-panel h3{margin:0 0 6px;color:#0b1b35}
+.te31-form-panel .te31-form-actions{display:flex;gap:8px}
+.te31-form-panel .te31-form-actions button{flex:1}
+.te31-bottom-nav{position:fixed;z-index:1000;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,760px);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:8px max(10px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));background:#0b1b35;border-top:1px solid #d4af3755;box-shadow:0 -8px 24px #0b1b351c}
+.te31-nav-item{margin:0;min-height:52px;padding:5px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;color:#dce4ef;border:0;box-shadow:none;font-size:10px;font-weight:750}
+.te31-nav-item span{font-size:19px;line-height:1.1;color:#d4af37}
+.te31-nav-item.active{color:#ff9418;background:#ffffff0d;border-radius:12px}.te31-nav-item.active span{color:#ff9418}
+#te31AccountPanel{scroll-margin-top:16px}
+#legacyHistoryCard{display:none!important}
+@media(min-width:650px){.te31-action-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.te31-action{min-height:105px;flex-direction:column;align-items:flex-start}.te31-action-icon{flex-basis:42px}}
+@media(max-width:420px){.te31-balance{padding:18px}.te31-mini-links button{font-size:11px}.te31-operation{grid-template-columns:34px minmax(0,1fr) auto;gap:8px;padding:10px}.te31-op-right{min-width:78px}.te31-op-right strong{font-size:12px}.te31-op-main b{font-size:12px}.te31-action{padding:12px;gap:9px}.te31-action-icon{flex-basis:36px;height:36px;font-size:19px}}
+
 </style>
 </head>
 <body>
@@ -204,6 +268,53 @@ body > header{display:none!important;}
 </div>
 <section id="dashboard" class="hidden">
 <div id="logoutBar" style="display:flex;justify-content:flex-end;position:static;margin:0 0 12px;padding:4px 0;">
+<div class="te31-topbar" id="te31Home">
+  <div class="te31-brand"><div class="te31-mark" aria-label="Logo Travels Épargne 31">TE</div><div><strong>TRAVELS Épargne 31</strong><small>Épargner aujourd'hui pour voyager demain</small></div></div>
+  <div class="te31-top-actions"><button type="button" class="te31-icon-btn" onclick="openHistory('deposits')" aria-label="Notifications" title="Notifications">♧</button><button type="button" class="te31-icon-btn" onclick="goToAccount()" aria-label="Mon profil" title="Mon profil">👤</button></div>
+</div>
+<section class="te31-balance" aria-label="Solde de mon épargne">
+  <div class="te31-wallet" aria-hidden="true">▣</div><div class="te31-flight-lines" aria-hidden="true"></div>
+  <div class="te31-balance-label">Solde de mon épargne</div>
+  <div class="te31-balance-amount" id="te31BalanceAmount">— FCFA</div>
+  <div class="te31-balance-foot" id="te31BalanceFoot">Synchronisation du compte sécurisé</div>
+  <div class="te31-mini-links"><button type="button" onclick="goToAccount()"><span>◈</span> Mon argent</button><button type="button" onclick="openHistory('deposits')"><span>▤</span> Mon suivi</button><button type="button" onclick="goToGoals()"><span>◎</span> Mes objectifs</button></div>
+</section>
+<div class="te31-action-grid" aria-label="Actions principales">
+  <button type="button" class="te31-action" onclick="pay()"><span class="te31-action-icon">＋</span><span><b>Faire un dépôt</b><small>Ajouter de l'argent</small></span></button>
+  <button type="button" class="te31-action" onclick="signalWithdraw()"><span class="te31-action-icon">↗</span><span><b>Retrait</b><small>Demander un retrait</small></span></button>
+  <button type="button" class="te31-action" onclick="openHistory('deposits')"><span class="te31-action-icon">▤</span><span><b>Historique</b><small>Voir les opérations</small></span></button>
+  <button type="button" class="te31-action" onclick="goToAccount()"><span class="te31-action-icon">♙</span><span><b>Mon compte</b><small>Mes informations</small></span></button>
+</div>
+<section id="te31DepositPanel" class="te31-form-panel hidden">
+  <h3>Faire un dépôt</h3><p class="muted">Votre demande sera enregistrée dans Supabase. Un dépôt ne sera compté comme validé qu’après confirmation.</p>
+  <form id="te31DepositForm">
+    <label for="te31DepositAmount">Montant (FCFA)</label><input id="te31DepositAmount" type="number" min="500" max="20000" step="500" required>
+    <label for="te31DepositProvider">Moyen de paiement</label><select id="te31DepositProvider" required><option value="wave">Wave</option><option value="orange_money">Orange Money</option><option value="mtn_momo">MTN MoMo</option></select>
+    <div id="te31WaveReferenceWrap"><label for="te31WaveReference">Référence de transaction Wave</label><input id="te31WaveReference" placeholder="Référence indiquée sur le reçu Wave"></div>
+    <p class="muted">Pour Wave, indiquez la référence du reçu. Orange Money et MTN MoMo seront enregistrés comme demandes en attente tant que leur intégration officielle n'est pas activée.</p>
+    <div class="te31-form-actions"><button type="submit">Envoyer la demande</button><button type="button" class="secondary" onclick="closeDepositPanel()">Annuler</button></div><p id="te31DepositStatus" class="muted" role="status"></p>
+  </form>
+</section>
+<section id="te31WithdrawalPanel" class="te31-form-panel hidden">
+  <h3>Demander un retrait</h3><p class="muted">Les demandes sont soumises aux règles de retrait de T.E-31 et restent en attente jusqu'à traitement par la gestion.</p>
+  <form id="te31WithdrawalForm">
+    <label for="te31PayoutProvider">Moyen de réception</label><select id="te31PayoutProvider" required><option value="wave">Wave</option><option value="orange_money">Orange Money</option><option value="mtn_momo">MTN MoMo</option></select>
+    <label for="te31PayoutPhone">Numéro de réception</label><input id="te31PayoutPhone" type="tel" required placeholder="07XXXXXXXX ou +22507XXXXXXXX">
+    <label for="te31RequestedDate">Date souhaitée (du lundi au vendredi)</label><input id="te31RequestedDate" type="date" required>
+    <p class="muted">Le retrait se prépare deux jours avant la date souhaitée. La validation et le paiement sont deux étapes distinctes.</p>
+    <div class="te31-form-actions"><button type="submit">Envoyer la demande</button><button type="button" class="secondary" onclick="closeWithdrawalPanel()">Annuler</button></div><p id="te31WithdrawalStatus" class="muted" role="status"></p>
+  </form>
+</section>
+<section id="te31History" class="te31-history">
+  <div class="te31-section-heading"><div><h3>Historique</h3><p>Consultez vos dépôts et vos retraits par cycles</p></div><button type="button" class="te31-icon-btn" style="flex:0 0 42px" onclick="loadClientDashboard(true)" aria-label="Actualiser l'historique" title="Actualiser">↻</button></div>
+  <div class="te31-tabs"><button id="te31DepositsTab" class="te31-tab active" type="button" onclick="openHistory('deposits')">Dépôts journaliers <span id="te31DepositCount">0</span></button><button id="te31WithdrawalsTab" class="te31-tab" type="button" onclick="openHistory('withdrawals')">Retraits par cycles <span id="te31WithdrawalCount">0</span></button></div>
+  <div id="te31DepositsView"><div class="te31-history-total"><small>Total réel des dépôts validés</small><strong id="te31DepositsTotal">0 FCFA</strong></div><div id="te31DepositsList" class="te31-history-list"><div class="te31-empty">Chargement des opérations depuis Supabase…</div></div></div>
+  <div id="te31WithdrawalsView" class="hidden"><div class="te31-history-total navy"><small>Total des retraits effectivement payés</small><strong id="te31WithdrawalsTotal">0 FCFA</strong></div><div id="te31WithdrawalsList" class="te31-history-list"><div class="te31-empty">Chargement des retraits depuis Supabase…</div></div></div>
+  <div class="te31-rules"><b>✦ NB : Règles de retrait</b><p>🚫 Pas de retrait samedi et dimanche.</p><p>📅 Le retrait se prépare deux jours avant la date souhaitée.</p><p>Exemple : pour un retrait lundi, signalez-le samedi. Pour un retrait mercredi, signalez-le lundi.</p></div>
+</section>
+<div id="te31AccountPanel" class="te31-history" style="margin-top:15px"><div class="te31-section-heading"><div><h3>Mon compte</h3><p>Informations du profil connecté</p></div></div><div id="te31AccountSummary" class="muted" style="margin-top:12px">Les informations du compte apparaîtront ici.</div><button type="button" class="secondary" onclick="logoutClient()">↪ Se déconnecter</button></div>
+<nav class="te31-bottom-nav" aria-label="Navigation principale"><button class="te31-nav-item active" id="te31NavHome" type="button" onclick="goToHome()"><span>⌂</span>Accueil</button><button class="te31-nav-item" id="te31NavDeposit" type="button" onclick="pay()"><span>＋</span>Dépôt</button><button class="te31-nav-item" id="te31NavHistory" type="button" onclick="openHistory('deposits')"><span>▤</span>Historique</button><button class="te31-nav-item" id="te31NavAccount" type="button" onclick="goToAccount()"><span>♙</span>Mon compte</button><button class="te31-nav-item" id="te31NavSettings" type="button" onclick="goToSettings()"><span>⚙</span>Paramètres</button></nav>
+
 <button type="button" onclick="logoutClient()" style="background:#b42318;color:#fff;border:2px solid #fff;padding:12px 16px;border-radius:12px;font-weight:900;font-size:16px;box-shadow:0 3px 10px #0003;">↪ Se déconnecter</button>
 </div>
 <div class="dashboard-top">
@@ -252,7 +363,7 @@ body > header{display:none!important;}
 <button class="secondary" onclick="signalWithdraw()">📢 Signaler mon retrait</button>
 </div>
 
-<div class="card"><h3 class="section-title">Historique des versements</h3><div id="history"></div></div>
+<div id="legacyHistoryCard" class="card"><h3 class="section-title">Historique des versements</h3><div id="history"></div></div>
 
 
 <button class="secondary" onclick="resetDemo()">Réinitialiser le prototype</button>
@@ -464,6 +575,7 @@ $('clientLoginForm').addEventListener('submit', async function(event){
     $('existingHero').classList.add('hidden');
     $('signup').classList.add('hidden');
     render();
+    loadClientDashboard(false).catch(error=>console.error('Chargement du tableau de bord:',error));
     window.scrollTo({top:0,behavior:'smooth'});
   }catch(error){
     status.textContent=error.message||'Connexion impossible. Vérifiez votre numéro et votre PIN.';
@@ -472,10 +584,162 @@ $('clientLoginForm').addEventListener('submit', async function(event){
   }
 });
 
-async function refreshConfirmedBalance(){
- const status=$('balanceStatus');
- status.textContent='Le solde confirmé est chargé à la connexion depuis Supabase. Déconnecte-toi puis reconnecte-toi pour récupérer les dernières cotisations confirmées. Les paiements réels ne sont pas encore activés.';
+async function refreshConfirmedBalance(){try{await loadClientDashboard(true);}catch(e){console.error(e);}}
+
+
+let te31DashboardData=null;
+let te31HistoryMode='deposits';
+const te31Endpoint='https://rmrzjnieuefdnqrxpjcn.supabase.co/functions/v1/smart-handler';
+const te31ApiKey='sb_publishable_7wuwoi_p6C4_xnITBLsOxA_6b6PDDbm';
+const te31Money=n=>Number(n||0).toLocaleString('fr-FR')+' FCFA';
+const te31Esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const te31Date=v=>{if(!v)return 'Date non renseignée';const d=new Date(v);return Number.isNaN(d.getTime())?'Date non renseignée':d.toLocaleString('fr-FR',{dateStyle:'medium',timeStyle:'short'});};
+const te31Status=s=>{const v=String(s||'').toLowerCase();if(['confirmed','validated','validé','effectué','effectue','paid','completed','success'].includes(v))return {label:'Validé',cls:'ok',paid:true};if(['pending','en attente','signalé','signale','requested'].includes(v))return {label:'En attente',cls:'wait',paid:false};if(['approved','approuvé','approuve'].includes(v))return {label:'Validé — paiement à effectuer',cls:'wait',paid:false};if(['rejected','failed','refused','refusé','refuse'].includes(v))return {label:'Refusé',cls:'bad',paid:false};return {label:s||'Statut non renseigné',cls:'',paid:false};};
+async function te31Api(action,payload={}){
+ const token=localStorage.getItem('e31_client_access_token')||localStorage.getItem('e31_access_token');
+ if(!token)throw new Error('Session expirée. Reconnectez-vous.');
+ const response=await fetch(te31Endpoint,{method:'POST',headers:{'Content-Type':'application/json','apikey':te31ApiKey,'Authorization':'Bearer '+token},body:JSON.stringify({action,...payload})});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok||data.error)throw new Error(data.error||('Erreur serveur HTTP '+response.status));
+ return data;
 }
+async function loadClientDashboard(showStatus=false){
+ const status=$('balanceStatus');
+ if(status)status.textContent='Synchronisation sécurisée avec Supabase…';
+ try{
+  const data=await te31Api('get_dashboard');
+  if(data.admin)throw new Error('Cette vue est réservée au compte client.');
+  te31DashboardData=data;
+  const x=get();
+  const a=Array.isArray(data.savings)?data.savings[0]:null;
+  if(x&&a){
+   const balance=(a.balance_override!==null&&a.balance_override!==undefined)?Number(a.balance_override):Number(a.opening_balance||0)+Number(a.daily_amount||0)*Number(a.days_paid||0);
+   x.id=a.id;x.name=data.profile?.full_name||x.name;x.phone=data.profile?.phone||x.phone;
+   x.goal=Number(a.goal_amount??x.goal??0);x.daily=Number(a.daily_amount??x.daily??0);
+   x.paid=balance;x.days=Number(a.days_paid??x.days??0);x.withdrawPhone=a.withdrawal_phone||x.withdrawPhone||x.phone;
+   save(x);render();
+  }
+  renderTe31Dashboard();
+  if(status)status.textContent='Solde et historique synchronisés avec Supabase.';
+  $('te31BalanceFoot').textContent='Données du compte connecté · synchronisées';
+  return data;
+ }catch(error){
+  if(status)status.textContent='Synchronisation impossible : '+error.message;
+  $('te31BalanceFoot').textContent='Synchronisation indisponible — montant local non actualisé';
+  if(showStatus)alert('Impossible d’actualiser les données : '+error.message);
+  throw error;
+ }
+}
+function te31DepositRows(data){
+ const rows=[],seen=new Set();
+ const add=(row,source)=>{
+  const status=te31Status(row.status);
+  const ref=String(row.reference||row.provider_reference||row.payment_reference||'').trim();
+  const key=ref?'ref:'+ref:source+':'+String(row.id||'')+':'+String(row.created_at||'');
+  if(seen.has(key))return;seen.add(key);
+  rows.push({id:row.id||key,date:row.created_at||row.confirmed_at,amount:Number(row.amount||0),provider:row.provider||row.payout_method||row.method||'',reference:ref,status:row.status,source});
+ };
+ (data?.contributions||[]).forEach(r=>add(r,'contribution'));
+ (data?.transactions||[]).filter(r=>String(r.type||'').toLowerCase()==='deposit').forEach(r=>add(r,'transaction'));
+ (data?.payments||[]).forEach(r=>add(r,'payment'));
+ return rows.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
+}
+function renderTe31Dashboard(){
+ const x=get();const data=te31DashboardData;
+ if(!x)return;
+ const balance=Number(x.paid||0);
+ $('te31BalanceAmount').textContent=te31Money(balance);
+ $('te31BalanceFoot').textContent='Objectif : '+te31Money(x.goal)+' · '+Math.min(100,Math.round(balance/Math.max(1,Number(x.goal||0))*100))+'% atteint';
+ $('te31AccountSummary').innerHTML='<div class="row"><div class="stat">Nom complet<b>'+te31Esc(x.name)+'</b></div><div class="stat">Téléphone<b>'+te31Esc(x.phone)+'</b></div></div><div class="row" style="margin-top:9px"><div class="stat">Cotisation quotidienne<b>'+te31Money(x.daily)+'</b></div><div class="stat">Objectif<b>'+te31Money(x.goal)+'</b></div></div>';
+ const deposits=te31DepositRows(data);
+ const confirmed=deposits.filter(r=>te31Status(r.status).paid);
+ const pendingPayments=deposits.filter(r=>!te31Status(r.status).paid);
+ $('te31DepositCount').textContent=String(deposits.length);
+ $('te31DepositsTotal').textContent=te31Money(confirmed.reduce((sum,r)=>sum+r.amount,0));
+ $('te31DepositsList').innerHTML=deposits.length?deposits.map(r=>{
+  const st=te31Status(r.status),provider=({wave:'Wave',orange_money:'Orange Money',mtn_momo:'MTN MoMo'})[String(r.provider).toLowerCase()]||r.provider||'Moyen non renseigné';
+  return '<article class="te31-operation"><span class="te31-op-icon">+</span><div class="te31-op-main"><b>Dépôt quotidien</b><small>'+te31Esc(te31Date(r.date))+'</small><small>'+te31Esc(provider)+(r.reference?' · Réf. '+te31Esc(r.reference):'')+'</small></div><div class="te31-op-right"><strong>+'+te31Money(r.amount)+'</strong><span class="te31-status '+st.cls+'">'+te31Esc(st.label)+'</span></div></article>';
+ }).join(''):'<div class="te31-empty">Aucun dépôt enregistré dans Supabase pour le moment. Aucun dépôt fictif n’est affiché.</div>';
+ const withdrawals=(data?.withdrawals||[]).slice().sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
+ const paidWithdrawals=withdrawals.filter(w=>te31Status(w.status).paid);
+ $('te31WithdrawalCount').textContent=String(withdrawals.length);
+ $('te31WithdrawalsTotal').textContent=te31Money(paidWithdrawals.reduce((sum,w)=>sum+Number(w.amount||0),0));
+ $('te31WithdrawalsList').innerHTML=withdrawals.length?withdrawals.map(w=>{
+  const st=te31Status(w.status),cycle=w.cycle_number??w.cycle??w.cycle_no;
+  const cycleText=cycle!==undefined&&cycle!==null?'Cycle n°'+te31Esc(cycle):'Cycle d’épargne';
+  const duration=w.cycle_duration_days??w.duration_days;
+  const durationText=duration?String(duration)+' jours':'Cycle de 31 jours';
+  return '<article class="te31-operation"><span class="te31-op-icon withdraw">↗</span><div class="te31-op-main"><b>Retrait · '+cycleText+'</b><small>'+te31Esc(te31Date(w.created_at))+'</small><small>'+te31Esc(durationText)+(w.payout_method?' · '+te31Esc(w.payout_method):'')+'</small></div><div class="te31-op-right"><strong class="withdraw">−'+te31Money(w.amount)+'</strong><span class="te31-status '+st.cls+'">'+te31Esc(st.label)+'</span></div></article>';
+ }).join(''):'<div class="te31-empty">Aucune demande de retrait enregistrée pour le moment.</div>';
+}
+function openHistory(mode){
+ te31HistoryMode=mode==='withdrawals'?'withdrawals':'deposits';
+ $('te31DepositsView').classList.toggle('hidden',te31HistoryMode!=='deposits');
+ $('te31WithdrawalsView').classList.toggle('hidden',te31HistoryMode!=='withdrawals');
+ $('te31DepositsTab').classList.toggle('active',te31HistoryMode==='deposits');
+ $('te31WithdrawalsTab').classList.toggle('active',te31HistoryMode==='withdrawals');
+ setTe31Nav('history');
+ $('te31History').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function setTe31Nav(active){
+ [['home','te31NavHome'],['deposit','te31NavDeposit'],['history','te31NavHistory'],['account','te31NavAccount'],['settings','te31NavSettings']].forEach(([key,id])=>$(id)?.classList.toggle('active',key===active));
+}
+function goToHome(){setTe31Nav('home');$('te31Home').scrollIntoView({behavior:'smooth',block:'start'});}
+function goToAccount(){setTe31Nav('account');$('te31AccountPanel').scrollIntoView({behavior:'smooth',block:'start'});}
+function goToGoals(){setTe31Nav('home');document.querySelector('#dashboard .card:nth-of-type(3)')?.scrollIntoView({behavior:'smooth',block:'start'});}
+function goToSettings(){setTe31Nav('settings');$('te31AccountPanel').scrollIntoView({behavior:'smooth',block:'start'});}
+function pay(){
+ closeWithdrawalPanel();
+ const x=get();$('te31DepositAmount').value=String(Math.min(20000,Math.max(500,Number(x?.daily||1000))));
+ $('te31DepositPanel').classList.remove('hidden');setTe31Nav('deposit');
+ $('te31WaveReferenceWrap').classList.toggle('hidden',$('te31DepositProvider').value!=='wave');
+ $('te31DepositPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function closeDepositPanel(){$('te31DepositPanel').classList.add('hidden');}
+function signalWithdraw(){
+ closeDepositPanel();const x=get();
+ $('te31PayoutPhone').value=x?.withdrawPhone||x?.phone||'';
+ const d=new Date();d.setDate(d.getDate()+2);
+ $('te31RequestedDate').min=d.toISOString().slice(0,10);
+ $('te31WithdrawalPanel').classList.remove('hidden');setTe31Nav('account');
+ $('te31WithdrawalPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function closeWithdrawalPanel(){$('te31WithdrawalPanel').classList.add('hidden');}
+$('te31DepositProvider').addEventListener('change',()=>{$('te31WaveReferenceWrap').classList.toggle('hidden',$('te31DepositProvider').value!=='wave');});
+$('te31DepositForm').addEventListener('submit',async e=>{
+ e.preventDefault();const button=e.submitter||e.target.querySelector('button[type="submit"]'),status=$('te31DepositStatus');
+ const provider=$('te31DepositProvider').value,amount=Number($('te31DepositAmount').value),reference=$('te31WaveReference').value.trim();
+ if(!Number.isInteger(amount)||amount<500||amount>20000||amount%500!==0){status.textContent='Montant invalide : entre 500 et 20 000 FCFA, par pas de 500.';return;}
+ if(provider==='wave'&&reference.length<4){status.textContent='Pour Wave, indiquez la référence figurant sur le reçu.';return;}
+ button.disabled=true;status.textContent='Enregistrement sécurisé de la demande…';
+ try{
+  const result=provider==='wave'?await te31Api('submit_wave_deposit',{amount,reference}):await te31Api('create_payment',{amount,provider});
+  status.textContent=result.message||'Demande enregistrée.';
+  await loadClientDashboard(false);alert(result.message||'Demande enregistrée. Le statut reste en attente jusqu’à confirmation.');
+ }catch(error){status.textContent=error.message||'La demande n’a pas pu être enregistrée.';}
+ finally{button.disabled=false;}
+});
+$('te31WithdrawalForm').addEventListener('submit',async e=>{
+ e.preventDefault();const button=e.submitter||e.target.querySelector('button[type="submit"]'),status=$('te31WithdrawalStatus');
+ let phone=$('te31PayoutPhone').value.trim().replace(/[\s().-]/g,'');
+ if(/^0[157][0-9]{8}$/.test(phone))phone='+225'+phone;
+ if(!/^\+2250[157][0-9]{8}$/.test(phone)){status.textContent='Entrez un numéro ivoirien valide.';return;}
+ const requestedDate=$('te31RequestedDate').value;
+ if(!requestedDate){status.textContent='Choisissez une date de retrait.';return;}
+ const weekday=new Date(requestedDate+'T12:00:00').getDay();
+ if(weekday===0||weekday===6){status.textContent='La date de retrait doit être du lundi au vendredi.';return;}
+ const min=new Date();min.setHours(0,0,0,0);min.setDate(min.getDate()+2);
+ if(new Date(requestedDate+'T12:00:00')<min){status.textContent='Signalez votre retrait au moins deux jours avant la date souhaitée.';return;}
+ button.disabled=true;status.textContent='Transmission de la demande à Supabase…';
+ try{
+  const result=await te31Api('create_withdrawal',{provider:$('te31PayoutProvider').value,payout_phone:phone,requested_date:requestedDate});
+  status.textContent=result.message||'Demande enregistrée en attente.';
+  await loadClientDashboard(false);
+  alert((result.message||'Demande enregistrée.')+'\nLe retrait ne sera considéré comme effectué qu’après confirmation du paiement.');
+  closeWithdrawalPanel();
+ }catch(error){status.textContent=error.message||'La demande n’a pas pu être enregistrée.';}
+ finally{button.disabled=false;}
+});
 
 function render(){
  const x=get(); if(!x)return;
@@ -548,7 +812,7 @@ function requestWithdrawal(){
   alert("📢 Votre retrait a été signalé. Date prévue : "+a.withdrawal.plannedDate);
 }
 
-function logoutClient(){if(confirm('Voulez-vous vous déconnecter ?')){localStorage.removeItem('e31');localStorage.removeItem('e31_client_access_token');$('dashboard').classList.add('hidden');$('loginPanel').classList.remove('hidden');$('signup').classList.add('hidden');$('existingHero').classList.add('hidden');$('loginPhone').value='';$('loginPin').value='';$('loginStatus').textContent='Vous êtes déconnecté. Entrez votre numéro et votre PIN pour vous reconnecter.';window.scrollTo({top:0,behavior:'smooth'});}}
+function logoutClient(){if(confirm('Voulez-vous vous déconnecter ?')){te31DashboardData=null;localStorage.removeItem('e31');localStorage.removeItem('e31_client_access_token');$('dashboard').classList.add('hidden');$('loginPanel').classList.remove('hidden');$('signup').classList.add('hidden');$('existingHero').classList.add('hidden');$('loginPhone').value='';$('loginPin').value='';$('loginStatus').textContent='Vous êtes déconnecté. Entrez votre numéro et votre PIN pour vous reconnecter.';window.scrollTo({top:0,behavior:'smooth'});}}
 function resetDemo(){localStorage.removeItem('e31');location.reload()}
 
 // Reprise des anciennes cartes papier : création du compte dans Supabase et copie de suivi locale sur cet appareil.
