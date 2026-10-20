@@ -339,6 +339,7 @@ body > header{display:none!important;}
  #dashboard .te31-deposit-operation .te31-status{grid-column:4;justify-self:end;margin-top:-2px;font-size:9px;padding:2px 5px}
 }
 
+ .te31-subhistory-title{margin:16px 0 10px;font-size:15px;font-weight:900;color:#102a43}
 </style>
 </head>
 <body>
@@ -493,8 +494,8 @@ body > header{display:none!important;}
 <section id="te31History" class="te31-history">
   <div class="te31-section-heading"><div><h3>Historique</h3><p>Consultez vos dépôts et vos retraits par cycles</p></div><button type="button" class="te31-icon-btn" style="flex:0 0 42px" onclick="loadClientDashboard(true)" aria-label="Actualiser l'historique" title="Actualiser">↻</button></div>
   <div class="te31-tabs"><button id="te31DepositsTab" class="te31-tab active" type="button" onclick="openHistory('deposits')">Dépôts journaliers <span id="te31DepositCount">0</span></button><button id="te31WithdrawalsTab" class="te31-tab" type="button" onclick="openHistory('withdrawals')">Retraits par cycles <span id="te31WithdrawalCount">0</span></button></div>
-  <div id="te31DepositsView"><div class="te31-history-total"><small>Total réel des dépôts validés</small><strong id="te31DepositsTotal">0 FCFA</strong></div><div id="te31DepositsList" class="te31-history-list"><div class="te31-empty">Chargement des opérations depuis Supabase…</div></div></div>
-  <div id="te31WithdrawalsView" class="hidden"><div class="te31-history-total navy"><small>Total des retraits effectivement payés</small><strong id="te31WithdrawalsTotal">0 FCFA</strong></div><div id="te31WithdrawalsList" class="te31-history-list"><div class="te31-empty">Chargement des retraits depuis Supabase…</div></div></div>
+  <div id="te31DepositsView"><h4 class="te31-subhistory-title">Historique des dépôts journaliers</h4><div class="te31-history-total"><small>Total réel des dépôts validés</small><strong id="te31DepositsTotal">0 FCFA</strong></div><div id="te31DepositsList" class="te31-history-list"><div class="te31-empty">Chargement des opérations depuis Supabase…</div></div></div>
+  <div id="te31WithdrawalsView" class="hidden"><h4 class="te31-subhistory-title">Historique des retraits par cycle</h4><div class="te31-history-total navy"><small>Total des retraits effectivement payés</small><strong id="te31WithdrawalsTotal">0 FCFA</strong></div><div id="te31WithdrawalsList" class="te31-history-list"><div class="te31-empty">Chargement des retraits depuis Supabase…</div></div></div>
   <div class="te31-rules"><b>✦ NB : Règles de retrait</b><p>🚫 Pas de retrait samedi et dimanche.</p><p>📅 Le retrait se prépare deux jours avant la date souhaitée.</p><p>Exemple : pour un retrait lundi, signalez-le samedi. Pour un retrait mercredi, signalez-le lundi.</p></div>
 </section>
 <div id="te31AccountPanel" class="te31-history" style="margin-top:15px"><div class="te31-section-heading"><div><h3>Mon compte</h3><p>Informations du profil connecté</p></div></div><div id="te31AccountSummary" class="muted" style="margin-top:12px">Les informations du compte apparaîtront ici.</div><button type="button" class="secondary" onclick="logoutClient()">↪ Se déconnecter</button></div>
