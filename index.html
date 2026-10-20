@@ -809,7 +809,8 @@ const te31Esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>
 const te31Date=v=>{if(!v)return 'Date non renseignée';const d=new Date(v);return Number.isNaN(d.getTime())?'Date non renseignée':d.toLocaleString('fr-FR',{dateStyle:'medium',timeStyle:'short'});};
 const te31Status=s=>{const v=String(s||'').toLowerCase();if(['confirmed','validated','validé','effectué','effectue','paid','completed','success'].includes(v))return {label:'Validé',cls:'ok',paid:true};if(['pending','en attente','signalé','signale','requested'].includes(v))return {label:'En attente',cls:'wait',paid:false};if(['approved','approuvé','approuve'].includes(v))return {label:'Validé — paiement à effectuer',cls:'wait',paid:false};if(['rejected','failed','refused','refusé','refuse'].includes(v))return {label:'Refusé',cls:'bad',paid:false};return {label:s||'Statut non renseigné',cls:'',paid:false};};
 async function te31Api(action,payload={}){
- const token=localStorage.getItem('e31_client_access_token')||localStorage.getItem('e31_access_token');
+ const isAdminSession=(()=>{try{return ['admin','gerante'].includes(String(JSON.parse(localStorage.getItem('e31_admin_profile')||'null')?.role||''));}catch(_){return false;}})();
+ const token=isAdminSession?(localStorage.getItem('e31_access_token')||localStorage.getItem('e31_client_access_token')):(localStorage.getItem('e31_client_access_token')||localStorage.getItem('e31_access_token'));
  if(!token)throw new Error('Session expirée. Reconnectez-vous.');
  const response=await fetch(te31Endpoint,{method:'POST',headers:{'Content-Type':'application/json','apikey':te31ApiKey,'Authorization':'Bearer '+token},body:JSON.stringify({action,...payload})});
  const data=await response.json().catch(()=>({}));
