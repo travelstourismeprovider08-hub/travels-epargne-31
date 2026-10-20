@@ -363,7 +363,7 @@ $('clientLoginForm').addEventListener('submit', async function(event){
   event.preventDefault();
   const status=$('loginStatus');
   const button=$('clientLoginButton');
-  let phone=$('loginPhone').value.trim().replace(/[\\s().-]/g,'');
+  let phone=$('loginPhone').value.trim().replace(/[\s().-]/g,'');
   const pin=$('loginPin').value.trim();
   if(/^0[157][0-9]{8}$/.test(phone)) phone='+225'+phone;
   if(!/^\+2250[157][0-9]{8}$/.test(phone)){
