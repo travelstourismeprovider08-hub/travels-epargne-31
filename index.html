@@ -194,6 +194,76 @@ body > header{display:none!important;}
  .te31-action{min-height:78px}
 }
 
+
+/* Reproduction rapprochée de la maquette Travels Épargne 31 */
+#dashboard .te31-topbar{
+  min-height:112px;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-radius:0 0 26px 26px;
+  background:linear-gradient(115deg,#061b3b 0%,#082f63 70%,#061b3b 100%);
+  border:1px solid #d4af37;box-shadow:0 5px 16px #08244a20;
+}
+#dashboard .te31-mark{
+  width:62px;height:62px;flex-basis:62px;border-radius:50%;
+  background:linear-gradient(145deg,#ffe17b,#f6a800 72%,#e97900);
+  border:2px solid #d4af37;color:#08234b;font-size:25px;
+}
+#dashboard .te31-brand strong{font-size:clamp(14px,4vw,24px);color:#fff;letter-spacing:.3px}
+#dashboard .te31-brand small{font-size:clamp(9px,2.5vw,14px);color:#f1f5fb}
+#dashboard .te31-icon-btn{background:#0b3264;color:#fff;border:1px solid #1c65aa;border-radius:50%}
+#dashboard .te31-balance{
+  min-height:145px;margin:10px 0 12px;padding:20px 22px;
+  border-radius:24px;background:linear-gradient(120deg,#092d61,#063a78 70%,#08234b);
+  border:1px solid #d4af3755;box-shadow:0 5px 14px #092d611c;
+}
+#dashboard .te31-balance-label{font-size:clamp(13px,3.5vw,19px);font-weight:800}
+#dashboard .te31-balance-amount{font-size:clamp(28px,7vw,42px);font-weight:950}
+#dashboard .te31-mini-links button{background:transparent;border:0;color:#ffcf48;font-weight:750}
+#dashboard .te31-action-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0;
+}
+#dashboard .te31-action{
+  min-width:0;min-height:112px;padding:10px 3px;gap:5px;
+  flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  border-radius:17px;background:linear-gradient(145deg,#ff9b00,#ff7100);
+  border:1px solid #ffc14b;color:#fff;box-shadow:0 4px 8px #ef79002b;
+}
+#dashboard .te31-action-icon{
+  flex:0 0 39px;width:39px;height:39px;border-radius:50%;
+  background:transparent;border:3px solid #fff;color:#fff;font-size:23px;
+}
+#dashboard .te31-action b{font-size:clamp(9px,2.8vw,15px);line-height:1.15;overflow-wrap:anywhere}
+#dashboard .te31-action small{font-size:clamp(8px,2.25vw,12px);line-height:1.15;overflow-wrap:anywhere}
+#dashboard .te31-action:nth-child(3){outline:3px solid #b84b00;outline-offset:-5px}
+#dashboard .te31-history{border-radius:22px;border:1px solid #d4af37;background:#fff;box-shadow:0 4px 12px #0b1b3514}
+#dashboard .te31-history>.te31-section-heading{
+  background:linear-gradient(120deg,#06224b,#082e61);padding:15px 16px;border-radius:20px 20px 0 0;
+}
+#dashboard .te31-history>.te31-section-heading h3{font-size:clamp(21px,5.6vw,31px);color:#fff}
+#dashboard .te31-history>.te31-section-heading p{font-size:clamp(11px,3.2vw,16px);color:#e7eef9}
+#dashboard .te31-tabs{display:grid;grid-template-columns:1.05fr 1fr;gap:0;margin:0 8px 12px}
+#dashboard .te31-tab{min-width:0;min-height:52px;padding:8px 5px;border-radius:15px;background:#082b5c;color:#fff;border:1px solid #3b83c8;font-size:clamp(9px,2.7vw,14px);font-weight:800}
+#dashboard .te31-tab.active{background:linear-gradient(120deg,#ffb000,#ff7b00);border:2px solid #fff;box-shadow:0 0 0 1px #d4af37}
+#dashboard .te31-history-total{margin:0 0 10px;padding:12px 14px;border-radius:12px;background:linear-gradient(110deg,#ffab00,#ff7900)}
+#dashboard .te31-history-total.navy{background:linear-gradient(120deg,#06224b,#082f63)}
+#dashboard .te31-history-list{gap:0;margin:0 8px 12px}
+#dashboard .te31-operation{border-radius:0;border:0;border-bottom:1px solid #e5ebf3;padding:11px 8px}
+#dashboard .te31-rules{margin:0!important;padding:14px 16px;background:#06224b;color:#fff;border-radius:0 0 20px 20px;font-size:12px}
+#dashboard .te31-rules b{color:#ffca37}
+#dashboard .te31-bottom-nav{background:linear-gradient(120deg,#061b3b,#082d60);border-top:2px solid #d4af37}
+#dashboard .te31-nav-item{color:#fff}
+#dashboard .te31-nav-item span{color:#fff}
+#dashboard .te31-nav-item.active{color:#ffca37;background:transparent;border-bottom:3px solid #ffb000;border-radius:0}
+#dashboard .te31-nav-item.active span{color:#ffb000}
+@media(max-width:370px){
+ #dashboard .te31-action-grid{gap:5px}
+ #dashboard .te31-action{min-height:100px;padding:7px 2px}
+ #dashboard .te31-action-icon{width:32px;height:32px;flex-basis:32px;font-size:19px;border-width:2px}
+ #dashboard .te31-action b{font-size:9px}
+ #dashboard .te31-action small{font-size:8px}
+ #dashboard .te31-brand small{max-width:165px}
+ #dashboard .te31-mark{width:45px;height:45px;flex-basis:45px;font-size:18px}
+}
+
 </style>
 </head>
 <body>
