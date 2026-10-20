@@ -110,6 +110,15 @@ body > header{display:none!important;}
 .te31-mini-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:20px;position:relative;z-index:1}
 #dashboard .te31-balance .te31-mini-links button{background:#D4AF37!important;background-image:linear-gradient(135deg,#B89420,#D4AF37)!important;color:#FFFFFF!important;border:1px solid #F0D878!important;box-shadow:0 4px 10px #0002!important}#dashboard .te31-balance .te31-mini-links button span{color:#FFFFFF!important}#dashboard .te31-balance .te31-mini-links button:focus,#dashboard .te31-balance .te31-mini-links button:active{background:#D4AF37!important;color:#FFFFFF!important}
 .te31-mini-links button span{color:#d4af37;margin-right:3px}
+.te31-days-mini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px;position:relative;z-index:1}
+.te31-days-mini .te31-day-pill{margin:0;padding:7px 10px;min-height:0;border-radius:12px;background:#F58220!important;background-image:linear-gradient(135deg,#F58220,#FF9418)!important;color:#FFFFFF!important;border:1px solid #FFB45E!important;box-shadow:0 3px 8px #0002!important;text-align:center;font-size:12px;line-height:1.3;font-weight:800}
+.te31-days-mini .te31-day-pill strong{display:block;margin-top:3px;color:#FFFFFF!important;font-size:15px;font-weight:900}
+.te31-progress{position:relative;z-index:1;margin-top:13px}
+.te31-progress-head{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#FFFFFF;font-size:12px;font-weight:800;margin-bottom:6px}
+.te31-progress-head #te31GoalProgressLabel{color:#D4AF37}
+.te31-progress-track{height:9px;border-radius:999px;overflow:hidden;background:#ffffff38;border:1px solid #ffffff25}
+.te31-progress-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,#B89420,#D4AF37);transition:width .25s ease}
+.te31-progress-caption{margin-top:5px;color:#D6DFEA;font-size:11px}
 .te31-action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:15px 0}
 .te31-action{display:flex;align-items:center;gap:12px;text-align:left;min-height:80px;margin:0;padding:15px;background:linear-gradient(135deg,#f58220,#ff9418);color:#fff;border:1px solid #e9a34a;box-shadow:0 9px 17px #f5822025;border-radius:18px}
 .te31-action-icon{display:grid;place-items:center;flex:0 0 42px;height:42px;border-radius:13px;background:#ffffff25;color:#fff;font-size:22px}
@@ -464,6 +473,15 @@ body > header{display:none!important;}
   <div class="te31-balance-amount" id="te31BalanceAmount">— FCFA</div>
   <div class="te31-balance-foot" id="te31BalanceFoot">Synchronisation du compte sécurisé</div>
   <div class="te31-mini-links"><button type="button" onclick="goToAccount()"><span>◈</span> Mon argent</button><button type="button" onclick="openHistory('deposits')"><span>▤</span> Mon suivi</button><button type="button" onclick="goToGoals()"><span>◎</span> Mes objectifs</button></div>
+  <div class="te31-days-mini" aria-label="Suivi des jours de cotisation">
+    <div class="te31-day-pill">Jours cotisés<strong id="te31DaysPaid">— jours</strong></div>
+    <div class="te31-day-pill">Jours restants<strong id="te31DaysRemaining">— jours</strong></div>
+  </div>
+  <div class="te31-progress" aria-label="Progression de mon épargne">
+    <div class="te31-progress-head"><span>Progression de mon épargne</span><span id="te31GoalProgressLabel">— %</span></div>
+    <div class="te31-progress-track" role="progressbar" aria-label="Progression vers l’objectif" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="te31-progress-fill" id="te31GoalProgress"></div></div>
+    <div class="te31-progress-caption" id="te31GoalCaption">Objectif : — FCFA</div>
+  </div>
 </section>
 <div class="te31-action-grid" aria-label="Actions principales">
   <button type="button" class="te31-action" onclick="pay()"><span class="te31-action-icon">＋</span><span><b>Faire un dépôt</b><small>Ajouter de l'argent</small></span></button>
@@ -861,6 +879,16 @@ function renderTe31Dashboard(){
  const balance=Number(x.paid||0);
  $('te31BalanceAmount').textContent=te31Money(balance);
  $('te31BalanceFoot').textContent='Objectif : '+te31Money(x.goal)+' · '+Math.min(100,Math.round(balance/Math.max(1,Number(x.goal||0))*100))+'% atteint';
+ const goal=Number(x.goal||0),daily=Number(x.daily||0),daysPaid=Math.max(0,Number(x.days||0));
+ const progress=goal>0?Math.max(0,Math.min(100,Math.round(balance/goal*100))):0;
+ const totalDays=daily>0&&goal>0?Math.ceil(goal/daily):0;
+ const daysRemaining=Math.max(0,totalDays-daysPaid);
+ $('te31DaysPaid').textContent=daysPaid+' '+(daysPaid===1?'jour':'jours');
+ $('te31DaysRemaining').textContent=totalDays>0?daysRemaining+' '+(daysRemaining===1?'jour':'jours'):'— jours';
+ $('te31GoalProgressLabel').textContent=goal>0?progress+' %':'— %';
+ $('te31GoalProgress').style.width=progress+'%';
+ $('te31GoalProgress').parentElement.setAttribute('aria-valuenow',String(progress));
+ $('te31GoalCaption').textContent='Objectif : '+te31Money(goal);
  $('te31AccountSummary').innerHTML='<div class="row"><div class="stat">Nom complet<b>'+te31Esc(x.name)+'</b></div><div class="stat">Téléphone<b>'+te31Esc(x.phone)+'</b></div></div><div class="row" style="margin-top:9px"><div class="stat">Cotisation quotidienne<b>'+te31Money(x.daily)+'</b></div><div class="stat">Objectif<b>'+te31Money(x.goal)+'</b></div></div>';
  const deposits=te31DepositRows(data);
  const confirmed=deposits.filter(r=>te31Status(r.status).paid);
