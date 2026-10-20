@@ -156,6 +156,44 @@ body > header{display:none!important;}
 @media(min-width:650px){.te31-action-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.te31-action{min-height:105px;flex-direction:column;align-items:flex-start}.te31-action-icon{flex-basis:42px}}
 @media(max-width:420px){.te31-balance{padding:18px}.te31-mini-links button{font-size:11px}.te31-operation{grid-template-columns:34px minmax(0,1fr) auto;gap:8px;padding:10px}.te31-op-right{min-width:78px}.te31-op-right strong{font-size:12px}.te31-op-main b{font-size:12px}.te31-action{padding:12px;gap:9px}.te31-action-icon{flex-basis:36px;height:36px;font-size:19px}}
 
+
+/* Ajustement visuel demandé — menu inspiré de la maquette de référence */
+.te31-topbar{
+  background:linear-gradient(120deg,#0b1b35 0%,#092b56 72%,#0b1b35 100%);
+  color:#fff;border:1px solid #d4af3770;border-radius:25px;
+  padding:15px 17px;margin:0 0 12px;
+  box-shadow:0 10px 24px #0b1b3522;
+}
+.te31-brand strong{color:#fff}
+.te31-brand small{color:#e2e8f0}
+.te31-mark{border-radius:50%;background:linear-gradient(145deg,#ffdb68,#f58220);color:#0b1b35}
+.te31-icon-btn{border-radius:50%;background:#102f59;color:#fff;border:1px solid #d4af3755}
+.te31-balance{margin-bottom:14px}
+.te31-action-grid{gap:10px}
+.te31-action{justify-content:center;min-height:90px}
+.te31-history{padding:0;overflow:hidden;border:1px solid #d4af37;background:#fff}
+.te31-history>.te31-section-heading{padding:16px 18px;background:linear-gradient(120deg,#0b1b35,#132945);color:#fff}
+.te31-history>.te31-section-heading h3{color:#fff}
+.te31-history>.te31-section-heading p{color:#dce4ef}
+.te31-history>.te31-tabs,.te31-history>.te31-history-total,.te31-history>.te31-history-list,.te31-history>.te31-rules{margin-left:12px;margin-right:12px}
+.te31-history>.te31-tabs{margin-top:12px}
+.te31-history>.te31-history-list{margin-bottom:12px}
+.te31-operation{border-radius:12px}
+.te31-status{white-space:nowrap}
+.te31-bottom-nav{border-top:2px solid #d4af37}
+.te31-nav-item.active{color:#ffd15c;background:#ffffff12}
+.te31-nav-item.active span{color:#ffd15c}
+@media(max-width:520px){
+ .te31-topbar{padding:12px;border-radius:20px;gap:8px}
+ .te31-brand{gap:8px}
+ .te31-mark{flex-basis:42px;height:42px;font-size:16px}
+ .te31-brand strong{font-size:14px}
+ .te31-brand small{font-size:10px}
+ .te31-icon-btn{width:37px;height:37px;min-height:37px;font-size:17px}
+ .te31-history>.te31-section-heading{padding:14px}
+ .te31-action{min-height:78px}
+}
+
 </style>
 </head>
 <body>
