@@ -1092,7 +1092,20 @@ function signalWithdraw(){
  alert('Votre retrait a été signalé avec succès.');
 }
 function pay(){
- const x=get(); alert('Ici sera connecté le paiement Wave Business.\\n\\nMontant prévu : '+x.daily.toLocaleString('fr-FR')+' F');
+ const x=get();
+ const amount=Math.min(20000,Math.max(500,Number(x?.daily||1000)));
+ const depositPanel=document.getElementById('te31DepositPanel');
+ if(depositPanel){
+  closeWithdrawalPanel();
+  document.getElementById('te31DepositAmount').value=String(amount);
+  document.getElementById('te31DepositProvider').value='wave';
+  document.getElementById('te31WaveReferenceWrap').classList.remove('hidden');
+  depositPanel.classList.remove('hidden');
+  if(typeof setTe31Nav==='function')setTe31Nav('deposit');
+  depositPanel.scrollIntoView({behavior:'smooth',block:'start'});
+  return;
+ }
+ alert('Le formulaire de dépôt sécurisé est indisponible sur cet écran. Connectez-vous à votre compte T.E-31 pour effectuer une demande de versement.');
 }
 function requestWithdrawal(){
   const today=new Date();
