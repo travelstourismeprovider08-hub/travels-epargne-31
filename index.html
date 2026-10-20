@@ -509,8 +509,8 @@ body > header{display:none!important;}
   <form id="te31DepositForm">
     <label for="te31DepositAmount">Montant (FCFA)</label><input id="te31DepositAmount" type="number" min="500" max="20000" step="500" required>
     <label for="te31DepositProvider">Moyen de paiement</label><select id="te31DepositProvider" required><option value="wave">Wave</option><option value="orange_money">Orange Money</option><option value="mtn_momo">MTN MoMo</option></select>
-    <div id="te31WaveReferenceWrap"><label for="te31WaveReference">Référence de transaction Wave</label><input id="te31WaveReference" placeholder="Référence indiquée sur le reçu Wave"></div>
-    <p class="muted">Pour Wave, indiquez la référence du reçu. Orange Money et MTN MoMo seront enregistrés comme demandes en attente tant que leur intégration officielle n'est pas activée.</p>
+    <div id="te31WaveReferenceWrap"><label for="te31WaveReference">Référence de la transaction</label><input id="te31WaveReference" required minlength="4" maxlength="120" placeholder="Référence figurant sur le reçu de paiement"></div>
+    <p class="muted">Après l’envoi, l’administration vérifiera le paiement dans le compte marchand. Votre solde ne changera qu’après validation.</p>
     <div class="te31-form-actions"><button type="submit">Envoyer la demande</button><button type="button" class="secondary" onclick="closeDepositPanel()">Annuler</button></div><p id="te31DepositStatus" class="muted" role="status"></p>
   </form>
 </section>
@@ -607,6 +607,7 @@ body > header{display:none!important;}
   <p class="muted">Gérez les comptes clients, modifiez leurs informations, réinitialisez les PIN ou désactivez les comptes. L’historique financier est conservé.</p>
   <div class="row"><button type="button" class="secondary" onclick="refreshAdminBalances()">↻ Actualiser les soldes des clients</button><button type="button" class="secondary" onclick="adminLogout()">Déconnexion admin</button></div>
   <p id="adminClientStatus" class="muted" role="status"></p>
+  <section class="card" style="margin:12px 0;padding:14px"><h3 class="section-title">💳 Versements à vérifier</h3><p class="muted">Vérifiez chaque paiement dans le compte marchand avant de confirmer. Le solde est crédité uniquement après confirmation.</p><div id="adminPendingDeposits" class="admin-list"><p class="muted">Chargement des demandes…</p></div></section>
   <div id="adminClientList" class="admin-list"></div>
   <section id="adminClientDetail" class="card hidden" style="margin-top:16px">
     <div class="row" style="align-items:center;justify-content:space-between">
@@ -973,15 +974,15 @@ function signalWithdraw(){
  $('te31WithdrawalPanel').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function closeWithdrawalPanel(){$('te31WithdrawalPanel').classList.add('hidden');}
-$('te31DepositProvider').addEventListener('change',()=>{$('te31WaveReferenceWrap').classList.toggle('hidden',$('te31DepositProvider').value!=='wave');});
+$('te31DepositProvider').addEventListener('change',()=>{$('te31WaveReferenceWrap').classList.remove('hidden');});
 $('te31DepositForm').addEventListener('submit',async e=>{
  e.preventDefault();const button=e.submitter||e.target.querySelector('button[type="submit"]'),status=$('te31DepositStatus');
  const provider=$('te31DepositProvider').value,amount=Number($('te31DepositAmount').value),reference=$('te31WaveReference').value.trim();
  if(!Number.isInteger(amount)||amount<500||amount>20000||amount%500!==0){status.textContent='Montant invalide : entre 500 et 20 000 FCFA, par pas de 500.';return;}
- if(provider==='wave'&&reference.length<4){status.textContent='Pour Wave, indiquez la référence figurant sur le reçu.';return;}
+ if(reference.length<4||reference.length>120){status.textContent='Indiquez une référence de transaction valide (4 à 120 caractères).';return;}
  button.disabled=true;status.textContent='Enregistrement sécurisé de la demande…';
  try{
-  const result=provider==='wave'?await te31Api('submit_wave_deposit',{amount,reference}):await te31Api('create_payment',{amount,provider});
+  const result=await te31Api('create_payment',{amount,provider,reference});
   status.textContent=result.message||'Demande enregistrée.';
   try{await loadClientDashboard(false);}catch(refreshError){status.textContent=(result.message||'Demande enregistrée.')+' L’actualisation de l’historique a échoué ; ne soumettez pas une deuxième demande pour cette raison.';}
   alert(result.message||'Demande enregistrée. Le statut reste en attente jusqu’à confirmation.');
@@ -1211,6 +1212,42 @@ async function e31AdminRequest(body) {
 function e31Escape(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+
+function renderAdminPendingDeposits(items){
+  const box=document.getElementById('adminPendingDeposits');
+  if(!box)return;
+  if(!Array.isArray(items)||!items.length){box.innerHTML='<p class="muted">Aucun versement en attente.</p>';return;}
+  box.innerHTML=items.map(p=>{
+    const provider=({wave:'Wave',orange_money:'Orange Money',mtn_momo:'MTN MoMo'})[p.provider]||p.provider||'Paiement';
+    return '<article class="admin-client" style="margin:8px 0;padding:12px">'+
+      '<b>'+e31Escape(p.client_name||'Client')+' · '+Number(p.amount||0).toLocaleString('fr-FR')+' FCFA</b>'+
+      '<div class="muted">'+e31Escape(p.client_phone||'')+' · '+e31Escape(provider)+'</div>'+
+      '<div class="muted">Référence : <b>'+e31Escape(p.provider_reference||'—')+'</b></div>'+
+      '<div class="muted">Reçu le '+e31Escape(p.created_at?new Date(p.created_at).toLocaleString('fr-FR'):'—')+'</div>'+
+      '<div class="admin-actions" style="margin-top:8px">'+
+      '<button type="button" onclick="confirmAdminDeposit(\''+e31Escape(p.id)+'\')">✓ Confirmer après vérification</button>'+
+      '<button type="button" style="background:#b42318" onclick="rejectAdminDeposit(\''+e31Escape(p.id)+'\')">Refuser</button>'+
+      '</div></article>';
+  }).join('');
+}
+async function confirmAdminDeposit(paymentId){
+  if(!confirm('Avez-vous vérifié dans le compte marchand que le montant et la référence correspondent bien à un paiement reçu ? Le solde sera crédité.'))return;
+  try{
+    const result=await e31AdminRequest({action:'admin_confirm_deposit',payment_id:paymentId});
+    alert(result.message||'Versement confirmé.');
+    await loadAdminClients();
+    if(activeAdminClientId)await openClientAccount(activeAdminClientId);
+  }catch(error){alert(error.message||'Impossible de confirmer le versement.');}
+}
+async function rejectAdminDeposit(paymentId){
+  if(!confirm('Refuser cette demande ? Aucun montant ne sera ajouté au solde.'))return;
+  try{
+    const result=await e31AdminRequest({action:'admin_reject_deposit',payment_id:paymentId});
+    alert(result.message||'Demande refusée.');
+    await loadAdminClients();
+  }catch(error){alert(error.message||'Impossible de refuser cette demande.');}
+}
+
 async function loadAdminClients() {
   const status = document.getElementById('adminClientStatus');
   const list = document.getElementById('adminClientList');
@@ -1219,6 +1256,7 @@ async function loadAdminClients() {
   try {
     const data = await e31AdminRequest({ action: 'get_dashboard' });
     if (!data.admin || !Array.isArray(data.clients)) throw new Error('Cette session ne dispose pas de l’accès à la gestion des clients.');
+    renderAdminPendingDeposits(data.pending_deposits || []);
     if (!data.clients.length) { list.innerHTML = ''; status.textContent = 'Aucun client trouvé.'; return; }
     list.innerHTML = data.clients.map(c => {
       const active = c.is_active !== false;
