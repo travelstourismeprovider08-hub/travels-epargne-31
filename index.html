@@ -842,6 +842,8 @@ async function loadClientDashboard(showStatus=false){
   if(dl)dl.innerHTML='<div class="te31-empty">Historique indisponible : '+te31Esc(message)+'. Réessayez avec le bouton d’actualisation.</div>';
   if(wt)wt.textContent='—';
   if(wl)wl.innerHTML='<div class="te31-empty">Historique des retraits indisponible : '+te31Esc(message)+'. Réessayez avec le bouton d’actualisation.</div>';
+  // Afficher les valeurs déjà enregistrées localement même si la synchronisation échoue.
+  try{renderTe31Dashboard();}catch(renderError){console.error('Affichage des données locales indisponible:',renderError);}
   if(showStatus)alert('Impossible d’actualiser les données : '+message);
   throw error;
  }
