@@ -542,7 +542,7 @@ body > header{display:none!important;}
   <button type="button" class="te31-action" onclick="goToAccount()"><span class="te31-action-icon">♙</span><span><b>Mon compte</b><small>Mes informations</small></span></button>
 </div>
 <section id="te31DepositPanel" class="te31-form-panel hidden">
-  <h3>Faire un dépôt</h3><p class="muted">Votre demande sera enregistrée dans Supabase. Un dépôt ne sera compté comme validé qu’après confirmation.</p>
+  <h3>Faire un dépôt</h3><p class="muted">Étape 1 : effectuez le transfert dans Wave ou Orange Money vers le compte marchand T.E-31 communiqué par la gestion. Étape 2 : saisissez ci-dessous le montant et la référence figurant sur le reçu. Votre demande sera enregistrée dans Supabase ; le solde ne sera crédité qu’après vérification du paiement par la gestion. Ce formulaire ne déclenche pas encore un paiement automatique.</p>
   <form id="te31DepositForm">
     <label for="te31DepositAmount">Montant (FCFA)</label><input id="te31DepositAmount" type="number" min="500" max="20000" step="500" required>
     <label for="te31DepositProvider">Moyen de paiement</label><select id="te31DepositProvider" required><option value="wave">Wave</option><option value="orange_money">Orange Money</option><option value="mtn_momo">MTN MoMo</option></select>
