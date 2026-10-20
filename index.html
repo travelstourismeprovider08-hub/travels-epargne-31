@@ -738,7 +738,8 @@ $('te31DepositForm').addEventListener('submit',async e=>{
  try{
   const result=provider==='wave'?await te31Api('submit_wave_deposit',{amount,reference}):await te31Api('create_payment',{amount,provider});
   status.textContent=result.message||'Demande enregistrée.';
-  await loadClientDashboard(false);alert(result.message||'Demande enregistrée. Le statut reste en attente jusqu’à confirmation.');
+  try{await loadClientDashboard(false);}catch(refreshError){status.textContent=(result.message||'Demande enregistrée.')+' L’actualisation de l’historique a échoué ; ne soumettez pas une deuxième demande pour cette raison.';}
+  alert(result.message||'Demande enregistrée. Le statut reste en attente jusqu’à confirmation.');
  }catch(error){status.textContent=error.message||'La demande n’a pas pu être enregistrée.';}
  finally{button.disabled=false;}
 });
@@ -757,7 +758,7 @@ $('te31WithdrawalForm').addEventListener('submit',async e=>{
  try{
   const result=await te31Api('create_withdrawal',{provider:$('te31PayoutProvider').value,payout_phone:phone,requested_date:requestedDate});
   status.textContent=result.message||'Demande enregistrée en attente.';
-  await loadClientDashboard(false);
+  try{await loadClientDashboard(false);}catch(refreshError){status.textContent=(result.message||'Demande enregistrée.')+' L’actualisation de l’historique a échoué ; ne soumettez pas une deuxième demande pour cette raison.';}
   alert((result.message||'Demande enregistrée.')+'\nLe retrait ne sera considéré comme effectué qu’après confirmation du paiement.');
   closeWithdrawalPanel();
  }catch(error){status.textContent=error.message||'La demande n’a pas pu être enregistrée.';}
