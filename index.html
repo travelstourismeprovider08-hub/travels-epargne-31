@@ -1448,4 +1448,41 @@ async function reactivateClientAccount(clientId) {
   }
 })();
 </script>
+
+<script>
+/* Synchronisation automatique T.E-31 : données uniquement, sans recharger la page. */
+(function te31AutoRefresh(){
+  let clientRefreshRunning = false;
+  let adminRefreshRunning = false;
+
+  async function refreshVisibleData(){
+    if (document.hidden) return;
+
+    const dashboard = document.getElementById('dashboard');
+    const adminTools = document.getElementById('adminClientTools');
+    const clientToken = localStorage.getItem('e31_client_access_token');
+    const adminToken = localStorage.getItem('e31_access_token');
+
+    if (clientToken && dashboard && !dashboard.classList.contains('hidden') && !clientRefreshRunning) {
+      clientRefreshRunning = true;
+      try { await loadClientDashboard(false); }
+      catch (error) { console.error('Actualisation automatique du compte client :', error); }
+      finally { clientRefreshRunning = false; }
+    }
+
+    if (adminToken && adminTools && !adminTools.classList.contains('hidden') && !adminRefreshRunning) {
+      adminRefreshRunning = true;
+      try { await refreshAdminBalances(); }
+      catch (error) { console.error('Actualisation automatique de la gestion :', error); }
+      finally { adminRefreshRunning = false; }
+    }
+  }
+
+  window.setInterval(refreshVisibleData, 30000);
+  document.addEventListener('visibilitychange', function(){
+    if (!document.hidden) refreshVisibleData();
+  });
+  window.addEventListener('focus', refreshVisibleData);
+})();
+</script>
 </body></html>
