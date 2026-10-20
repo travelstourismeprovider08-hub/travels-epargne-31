@@ -349,7 +349,7 @@ body > header{display:none!important;}
 <input id="photoInput" type="file" accept="image/*" onchange="savePhoto(event)">
 </div>
 
-<div class="card">
+<div class="card" id="te31GoalsCard">
 <h3 class="section-title">Votre plan</h3>
 <div class="row">
 <div class="stat"><span class="muted">Versement quotidien</span><b id="dailyShow"></b></div>
@@ -670,7 +670,7 @@ function renderTe31Dashboard(){
   const cycleText=cycle!==undefined&&cycle!==null?'Cycle n°'+te31Esc(cycle):'Cycle d’épargne';
   const duration=w.cycle_duration_days??w.duration_days;
   const durationText=duration?String(duration)+' jours':'Cycle de 31 jours';
-  return '<article class="te31-operation"><span class="te31-op-icon withdraw">↗</span><div class="te31-op-main"><b>Retrait · '+cycleText+'</b><small>'+te31Esc(te31Date(w.created_at))+'</small><small>'+te31Esc(durationText)+(w.payout_method?' · '+te31Esc(w.payout_method):'')+'</small></div><div class="te31-op-right"><strong class="withdraw">−'+te31Money(w.amount)+'</strong><span class="te31-status '+st.cls+'">'+te31Esc(st.label)+'</span></div></article>';
+  const withdrawalStatus=st.paid?'Effectué':st.label; return '<article class="te31-operation"><span class="te31-op-icon withdraw">↗</span><div class="te31-op-main"><b>Retrait · '+cycleText+'</b><small>'+te31Esc(te31Date(w.created_at))+'</small><small>'+te31Esc(durationText)+(w.payout_method?' · '+te31Esc(w.payout_method):'')+'</small></div><div class="te31-op-right"><strong class="withdraw">−'+te31Money(w.amount)+'</strong><span class="te31-status '+st.cls+'">'+te31Esc(withdrawalStatus)+'</span></div></article>';
  }).join(''):'<div class="te31-empty">Aucune demande de retrait enregistrée pour le moment.</div>';
 }
 function openHistory(mode){
@@ -687,7 +687,7 @@ function setTe31Nav(active){
 }
 function goToHome(){setTe31Nav('home');$('te31Home').scrollIntoView({behavior:'smooth',block:'start'});}
 function goToAccount(){setTe31Nav('account');$('te31AccountPanel').scrollIntoView({behavior:'smooth',block:'start'});}
-function goToGoals(){setTe31Nav('home');document.querySelector('#dashboard .card:nth-of-type(3)')?.scrollIntoView({behavior:'smooth',block:'start'});}
+function goToGoals(){setTe31Nav('home');$('te31GoalsCard')?.scrollIntoView({behavior:'smooth',block:'start'});}
 function goToSettings(){setTe31Nav('settings');$('te31AccountPanel').scrollIntoView({behavior:'smooth',block:'start'});}
 function pay(){
  closeWithdrawalPanel();
