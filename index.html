@@ -605,7 +605,7 @@ body > header{display:none!important;}
 <div id="adminClientTools" class="card hidden">
   <h3 class="section-title">⚙️ Gestion des comptes clients</h3>
   <p class="muted">Gérez les comptes clients, modifiez leurs informations, réinitialisez les PIN ou désactivez les comptes. L’historique financier est conservé.</p>
-  <div class="row"><button type="button" class="secondary" onclick="loadAdminClients()">Actualiser la liste des clients</button><button type="button" class="secondary" onclick="adminLogout()">Déconnexion admin</button></div>
+  <div class="row"><button type="button" class="secondary" onclick="refreshAdminBalances()">↻ Actualiser les soldes des clients</button><button type="button" class="secondary" onclick="adminLogout()">Déconnexion admin</button></div>
   <p id="adminClientStatus" class="muted" role="status"></p>
   <div id="adminClientList" class="admin-list"></div>
   <section id="adminClientDetail" class="card hidden" style="margin-top:16px">
@@ -1236,11 +1236,19 @@ async function loadAdminClients() {
   } catch (err) { status.textContent = 'Erreur : ' + (err.message || 'chargement impossible'); }
 }
 
+let activeAdminClientId=null;
+async function refreshAdminBalances(){
+  await loadAdminClients();
+  const panel=document.getElementById('adminClientDetail');
+  if(activeAdminClientId&&panel&&!panel.classList.contains('hidden')) await openClientAccount(activeAdminClientId);
+}
 function closeClientAccount(){
   const panel=document.getElementById('adminClientDetail');
   if(panel) panel.classList.add('hidden');
+  activeAdminClientId=null;
 }
 async function openClientAccount(clientId){
+  activeAdminClientId=clientId;
   const panel=document.getElementById('adminClientDetail');
   const status=document.getElementById('clientDetailStatus');
   const content=document.getElementById('clientDetailContent');
