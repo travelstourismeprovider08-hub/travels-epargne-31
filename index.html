@@ -809,9 +809,16 @@ async function loadClientDashboard(showStatus=false){
   $('te31BalanceFoot').textContent='Données du compte connecté · synchronisées';
   return data;
  }catch(error){
-  if(status)status.textContent='Synchronisation impossible : '+error.message;
-  $('te31BalanceFoot').textContent='Synchronisation indisponible — montant local non actualisé';
-  if(showStatus)alert('Impossible d’actualiser les données : '+error.message);
+  const message=String(error?.message||'Erreur inconnue');
+  if(status)status.textContent='Synchronisation impossible : '+message;
+  $('te31BalanceFoot').textContent='Synchronisation indisponible — montant non vérifié';
+  const dt=$('te31DepositsTotal'), dl=$('te31DepositsList');
+  const wt=$('te31WithdrawalsTotal'), wl=$('te31WithdrawalsList');
+  if(dt)dt.textContent='—';
+  if(dl)dl.innerHTML='<div class="te31-empty">Historique indisponible : '+te31Esc(message)+'. Réessayez avec le bouton d’actualisation.</div>';
+  if(wt)wt.textContent='—';
+  if(wl)wl.innerHTML='<div class="te31-empty">Historique des retraits indisponible : '+te31Esc(message)+'. Réessayez avec le bouton d’actualisation.</div>';
+  if(showStatus)alert('Impossible d’actualiser les données : '+message);
   throw error;
  }
 }
