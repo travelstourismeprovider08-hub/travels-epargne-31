@@ -315,6 +315,30 @@ body > header{display:none!important;}
   box-shadow:0 4px 10px #0b1b352e!important;
 }
 
+
+/* Historique des dépôts aligné de gauche à droite */
+#dashboard .te31-deposit-operation{
+  display:grid!important;
+  grid-template-columns:minmax(68px,auto) 28px minmax(90px,1fr) auto auto;
+  align-items:center;gap:8px;padding:12px 10px;
+  border:1px solid #dcefe2;border-radius:12px;background:#fff;
+}
+#dashboard .te31-deposit-date{color:#1769c2!important;font-size:11px;font-weight:800;white-space:nowrap}
+#dashboard .te31-deposit-plus{width:26px;height:26px;background:#e6f8ed;color:#168544;font-size:20px}
+#dashboard .te31-deposit-label{min-width:0}
+#dashboard .te31-deposit-label b{display:block;color:#168544;font-size:12px;line-height:1.25}
+#dashboard .te31-deposit-label small{display:block;color:#168544;font-size:10px;overflow-wrap:anywhere}
+#dashboard .te31-deposit-amount{color:#168544;font-size:12px;white-space:nowrap}
+#dashboard .te31-deposit-operation .te31-status.ok{background:#e6f8ed;color:#168544;border:1px solid #bce8cd;white-space:nowrap}
+@media(max-width:430px){
+ #dashboard .te31-deposit-operation{grid-template-columns:minmax(62px,auto) 24px minmax(75px,1fr) auto;gap:6px;padding:10px 7px}
+ #dashboard .te31-deposit-plus{width:23px;height:23px;font-size:17px}
+ #dashboard .te31-deposit-label b{font-size:11px}
+ #dashboard .te31-deposit-label small{font-size:9px}
+ #dashboard .te31-deposit-amount{font-size:11px}
+ #dashboard .te31-deposit-operation .te31-status{grid-column:4;justify-self:end;margin-top:-2px;font-size:9px;padding:2px 5px}
+}
+
 </style>
 </head>
 <body>
@@ -834,7 +858,7 @@ function renderTe31Dashboard(){
  $('te31DepositsTotal').textContent=te31Money(confirmed.reduce((sum,r)=>sum+r.amount,0));
  $('te31DepositsList').innerHTML=deposits.length?deposits.map(r=>{
   const st=te31Status(r.status),provider=({wave:'Wave',orange_money:'Orange Money',mtn_momo:'MTN MoMo'})[String(r.provider).toLowerCase()]||r.provider||'Moyen non renseigné';
-  return '<article class="te31-operation"><span class="te31-op-icon">+</span><div class="te31-op-main"><b>Dépôt quotidien</b><small>'+te31Esc(te31Date(r.date))+'</small><small>'+te31Esc(provider)+(r.reference?' · Réf. '+te31Esc(r.reference):'')+'</small></div><div class="te31-op-right"><strong>+'+te31Money(r.amount)+'</strong><span class="te31-status '+st.cls+'">'+te31Esc(st.label)+'</span></div></article>';
+  return '<article class="te31-operation te31-deposit-operation"><small class="te31-deposit-date">'+te31Esc(te31Date(r.date))+'</small><span class="te31-op-icon te31-deposit-plus">+</span><div class="te31-deposit-label"><b>Dépôt quotidien</b><small>'+te31Esc(provider)+(r.reference?' · Réf. '+te31Esc(r.reference):'')+'</small></div><strong class="te31-deposit-amount">+'+te31Money(r.amount)+'</strong><span class="te31-status '+st.cls+'">'+te31Esc(st.label)+'</span></article>';
  }).join(''):'<div class="te31-empty">Aucun dépôt enregistré dans Supabase pour le moment. Aucun dépôt fictif n’est affiché.</div>';
  const withdrawals=(data?.withdrawals||[]).slice().sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
  const paidWithdrawals=withdrawals.filter(w=>te31WithdrawalStatus(w.status).paid);
