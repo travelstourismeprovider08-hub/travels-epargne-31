@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build T.E-31 Android package
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  build-apk:
+  build-android:
     runs-on: ubuntu-latest
     env:
       ANDROID_HOME: /usr/local/lib/android/sdk
@@ -45,11 +45,11 @@ jobs:
           unzip -q /tmp/gradle.zip -d /tmp
           echo "/tmp/gradle-8.9/bin" >> "$GITHUB_PATH"
 
-      - name: Build debug APK
+      - name: Build debug APK for device testing
         working-directory: TravelsEpargneAndroid
         run: gradle --no-daemon assembleDebug
 
-      - name: Verify APK output
+      - name: Verify debug APK
         working-directory: TravelsEpargneAndroid
         run: |
           APK="$(find app/build/outputs/apk/debug -maxdepth 1 -name '*.apk' -type f -print -quit)"
@@ -58,9 +58,29 @@ jobs:
           unzip -t "$APK"
           ls -lh "$APK"
 
-      - name: Upload APK
+      - name: Build release Android App Bundle
+        working-directory: TravelsEpargneAndroid
+        run: gradle --no-daemon bundleRelease
+
+      - name: Verify release AAB output
+        working-directory: TravelsEpargneAndroid
+        run: |
+          AAB="$(find app/build/outputs/bundle/release -maxdepth 1 -name '*.aab' -type f -print -quit)"
+          test -n "$AAB"
+          test -s "$AAB"
+          unzip -t "$AAB"
+          ls -lh "$AAB"
+
+      - name: Upload Android test APK
         uses: actions/upload-artifact@v4
         with:
-          name: travels-epargne-debug-apk
+          name: te31-android-test-apk
           path: TravelsEpargneAndroid/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+      - name: Upload Play Store bundle (signing status must be checked)
+        uses: actions/upload-artifact@v4
+        with:
+          name: te31-play-store-aab
+          path: TravelsEpargneAndroid/app/build/outputs/bundle/release/*.aab
           if-no-files-found: error
