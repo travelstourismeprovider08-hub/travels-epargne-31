@@ -817,15 +817,14 @@ async function loadClientDashboard(showStatus=false){
  if(status)status.textContent='Synchronisation sécurisée avec Supabase…';
  try{
   const data=await te31Api('get_dashboard');
-  if(data.admin)throw new Error('Cette vue est réservée au compte client.');
+  // Un administrateur peut aussi consulter son propre compte d’épargne.
+  if(data.admin&&Array.isArray(data.self_savings))data.savings=data.self_savings;
   te31DashboardData=data;
-  const x=get();
   const a=Array.isArray(data.savings)?data.savings[0]:null;
-  if(x&&a){
+  if(a){
+   const previous=get()||{};
    const balance=(a.balance_override!==null&&a.balance_override!==undefined)?Number(a.balance_override):Number(a.opening_balance||0)+Number(a.daily_amount||0)*Number(a.days_paid||0);
-   x.id=a.id;x.name=data.profile?.full_name||x.name;x.phone=data.profile?.phone||x.phone;
-   x.goal=Number(a.goal_amount??x.goal??0);x.daily=Number(a.daily_amount??x.daily??0);
-   x.paid=balance;x.days=Number(a.days_paid??x.days??0);x.withdrawPhone=a.withdrawal_phone||x.withdrawPhone||x.phone;
+   const x={...previous,id:a.id,name:data.profile?.full_name||previous.name||'Client',phone:data.profile?.phone||previous.phone||'',goal:Number(a.goal_amount??previous.goal??0),daily:Number(a.daily_amount??previous.daily??0),paid:balance,days:Number(a.days_paid??previous.days??0),daysRemaining:Number(a.days_remaining??(31-Number(a.days_paid??previous.days??0))),withdrawPhone:a.withdrawal_phone||previous.withdrawPhone||data.profile?.phone||'',history:Array.isArray(previous.history)?previous.history:[]};
    save(x);render();
   }
   renderTe31Dashboard();
