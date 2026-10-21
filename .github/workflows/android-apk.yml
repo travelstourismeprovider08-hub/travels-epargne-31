@@ -1,86 +1,33 @@
-name: Build T.E-31 Android package
+name: Build Android T.E-31
 
 on:
   workflow_dispatch:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-permissions:
-  contents: read
+    paths:
+      - "package.json"
+      - "capacitor.config.json"
+      - ".github/workflows/android-apk.yml"
 
 jobs:
   build-android:
     runs-on: ubuntu-latest
-    env:
-      ANDROID_HOME: /usr/local/lib/android/sdk
-      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Prepare Android project
-        run: |
-          unzip -o Travels_Epargne_Android_Project.zip -d .
-          test -f TravelsEpargneAndroid/app/build.gradle
-          test -f TravelsEpargneAndroid/app/src/main/AndroidManifest.xml
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
-
-      - name: Install Android SDK packages
-        run: |
-          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort | tail -n 1)"
-          test -x "$SDKMANAGER"
-          yes | "$SDKMANAGER" --licenses >/dev/null || true
-          "$SDKMANAGER" "platform-tools" "platforms;android-34" "build-tools;34.0.0"
-
-      - name: Install Gradle
-        run: |
-          wget -q https://services.gradle.org/distributions/gradle-8.9-bin.zip -O /tmp/gradle.zip
-          unzip -q /tmp/gradle.zip -d /tmp
-          echo "/tmp/gradle-8.9/bin" >> "$GITHUB_PATH"
-
-      - name: Build debug APK for device testing
-        working-directory: TravelsEpargneAndroid
-        run: gradle --no-daemon assembleDebug
-
-      - name: Verify debug APK
-        working-directory: TravelsEpargneAndroid
-        run: |
-          APK="$(find app/build/outputs/apk/debug -maxdepth 1 -name '*.apk' -type f -print -quit)"
-          test -n "$APK"
-          test -s "$APK"
-          unzip -t "$APK"
-          ls -lh "$APK"
-
-      - name: Build release Android App Bundle
-        working-directory: TravelsEpargneAndroid
-        run: gradle --no-daemon bundleRelease
-
-      - name: Verify release AAB output
-        working-directory: TravelsEpargneAndroid
-        run: |
-          AAB="$(find app/build/outputs/bundle/release -maxdepth 1 -name '*.aab' -type f -print -quit)"
-          test -n "$AAB"
-          test -s "$AAB"
-          unzip -t "$AAB"
-          ls -lh "$AAB"
-
-      - name: Upload Android test APK
-        uses: actions/upload-artifact@v4
+          java-version: "21"
+      - run: npm install
+      - run: npx cap add android
+      - run: npx cap sync android
+      - name: Build installable APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
         with:
-          name: te31-android-test-apk
-          path: TravelsEpargneAndroid/app/build/outputs/apk/debug/*.apk
-          if-no-files-found: error
-
-      - name: Upload Play Store bundle (signing status must be checked)
-        uses: actions/upload-artifact@v4
-        with:
-          name: te31-play-store-aab
-          path: TravelsEpargneAndroid/app/build/outputs/bundle/release/*.aab
-          if-no-files-found: error
+          name: TE31-Android-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 14
