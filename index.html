@@ -612,6 +612,7 @@ body:has(#loginPanel:not(.hidden)) #contactFooter,
   </form>
 </section>
 <section id="te31Notifications" class="te31-history" style="margin-top:15px"><div class="te31-section-heading"><div><h3>🔔 Mes notifications</h3><p>Confirmations et refus de vos opérations</p></div><button type="button" class="te31-icon-btn" style="flex:0 0 42px" onclick="loadClientDashboard(true)" aria-label="Actualiser les notifications">↻</button></div><div id="te31NotificationList" class="te31-history-list"><div class="te31-empty">Les changements de statut apparaîtront ici.</div></div></section>
+<section id="te31LoyaltyBonuses" class="te31-history" style="margin-top:15px"><div class="te31-section-heading"><div><h3>🏅 Mes primes de fidélité</h3><p>Suivi des primes après 93 jours consécutifs de cotisations confirmées</p></div><button type="button" class="te31-icon-btn" style="flex:0 0 42px" onclick="loadClientDashboard(true)" aria-label="Actualiser les primes">↻</button></div><div id="te31LoyaltyBonusList" class="te31-history-list"><div class="te31-empty">Chargement des primes…</div></div></section>
 <section id="te31History" class="te31-history">
   <div class="te31-section-heading"><div><h3>Historique</h3><p>Consultez vos dépôts et vos retraits par cycles</p></div><button type="button" class="te31-icon-btn" style="flex:0 0 42px" onclick="loadClientDashboard(true)" aria-label="Actualiser l'historique" title="Actualiser">↻</button></div>
   <div class="te31-tabs"><button id="te31DepositsTab" class="te31-tab active" type="button" onclick="openHistory('deposits')">Dépôts journaliers <span id="te31DepositCount">0</span></button><button id="te31WithdrawalsTab" class="te31-tab" type="button" onclick="openHistory('withdrawals')">Retraits par cycles <span id="te31WithdrawalCount">0</span></button></div>
@@ -1071,6 +1072,9 @@ function renderTe31Dashboard(){
  $('te31GoalCaption').textContent='Objectif : '+te31Money(goal);
  $('te31AccountSummary').innerHTML='<div class="row"><div class="stat">Nom complet<b>'+te31Esc(x.name)+'</b></div><div class="stat">Téléphone<b>'+te31Esc(x.phone)+'</b></div></div><div class="row" style="margin-top:9px"><div class="stat">Cotisation quotidienne<b>'+te31Money(x.daily)+'</b></div><div class="stat">Objectif<b>'+te31Money(x.goal)+'</b></div></div>';
  renderTe31Notifications();
+ const bonuses=(data?.loyalty_bonuses||[]).slice().sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
+ const bonusList=$('te31LoyaltyBonusList');
+ if(bonusList)bonusList.innerHTML=bonuses.length?bonuses.map(b=>'<article class="te31-operation"><span class="te31-op-icon" style="background:#fff3cd;color:#8a6500">★</span><div class="te31-op-main"><b>Prime de fidélité créditée</b><small>Période : '+te31Esc(te31Date(b.streak_start))+' au '+te31Esc(te31Date(b.streak_end))+'</small><small>Statut : '+(b.status==='paid'?'Créditée':'Enregistrée')+'</small></div><div class="te31-op-right"><strong style="color:#168544">+'+te31Money(b.bonus_amount)+' FCFA</strong></div></article>').join(''):'<div class="te31-empty">Aucune prime attribuée pour le moment. Une prime sera affichée ici lorsque 93 jours consécutifs de cotisations confirmées auront été vérifiés.</div>';
  const deposits=te31DepositRows(data);
  const confirmed=deposits.filter(r=>te31Status(r.status).paid);
  const pendingPayments=deposits.filter(r=>!te31Status(r.status).paid);
