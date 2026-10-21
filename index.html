@@ -1590,7 +1590,7 @@ async function reactivateClientAccount(clientId) {
     }
   }
 
-  window.setInterval(refreshVisibleData, 30000);
+  window.setInterval(refreshVisibleData, 10000);
   document.addEventListener('visibilitychange', function(){
     if (!document.hidden) refreshVisibleData();
   });
