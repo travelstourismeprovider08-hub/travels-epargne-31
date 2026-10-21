@@ -7,6 +7,8 @@ on:
       - "package.json"
       - "capacitor.config.json"
       - "www/**"
+      - "resources/**"
+      - "scripts/**"
       - ".github/workflows/android-apk.yml"
 
 jobs:
@@ -22,8 +24,11 @@ jobs:
           distribution: temurin
           java-version: "21"
       - run: npm install
+      - run: npm install --no-save sharp
       - run: npx cap add android
       - run: npx cap sync android
+      - name: Apply official T.E-31 interface logo to Android app icon
+        run: node scripts/generate-android-icons.cjs
       - name: Build installable APK
         working-directory: android
         run: ./gradlew assembleDebug
