@@ -590,10 +590,11 @@ body:has(#loginPanel:not(.hidden)) #whatsappHelp { display:none !important; }
   <p id="te31ReferralStatus" class="muted" role="status">Partagez ce lien avec vos proches pour qu’ils s’inscrivent avec votre code.</p>
 </section>
 <section id="te31DepositPanel" class="te31-form-panel hidden">
-  <h3>Faire un dépôt</h3><p class="muted">Étape 1 : effectuez le transfert dans Wave ou Orange Money vers le compte marchand T.E-31 communiqué par la gestion. Étape 2 : saisissez ci-dessous le montant et la référence figurant sur le reçu. Votre demande sera enregistrée dans Supabase ; le solde ne sera crédité qu’après vérification du paiement par la gestion. Ce formulaire ne déclenche pas encore un paiement automatique.</p>
+  <h3>Faire un dépôt</h3><p class="muted">Étape 1 : choisissez Wave ou Orange Money et envoyez le montant au numéro de réception T.E-31 ci-dessous. Étape 2 : saisissez le montant et la référence figurant sur votre reçu. Votre demande sera enregistrée et le solde ne sera crédité qu’après vérification par la gestion. Le paiement n’est pas encore automatique.</p>
+  <div class="card" style="margin:10px 0;padding:14px;border:1px solid #f59e0b"><p style="margin:0 0 6px;font-weight:700">Numéro de réception Wave / Orange Money</p><p style="margin:0;font-size:1.25rem;font-weight:800"><a href="tel:0777362165" style="color:inherit;text-decoration:none">0777362165</a></p><p class="muted" style="margin:6px 0 0">Vérifiez le numéro avant de confirmer le transfert.</p></div>
   <form id="te31DepositForm">
     <label for="te31DepositAmount">Montant (FCFA)</label><input id="te31DepositAmount" type="number" min="500" max="20000" step="500" required>
-    <label for="te31DepositProvider">Moyen de paiement</label><select id="te31DepositProvider" required><option value="wave">Wave</option><option value="orange_money">Orange Money</option><option value="mtn_momo">MTN MoMo</option></select>
+    <label for="te31DepositProvider">Moyen de paiement</label><select id="te31DepositProvider" required><option value="wave">Wave</option><option value="orange_money">Orange Money</option></select>
     <div id="te31WaveReferenceWrap"><label for="te31WaveReference">Référence de la transaction</label><input id="te31WaveReference" required minlength="4" maxlength="120" placeholder="Référence figurant sur le reçu de paiement"></div>
     <p class="muted">Après l’envoi, l’administration vérifiera le paiement dans le compte marchand. Votre solde ne changera qu’après validation.</p>
     <div class="te31-form-actions"><button type="submit">Envoyer la demande</button><button type="button" class="secondary" onclick="closeDepositPanel()">Annuler</button></div><p id="te31DepositStatus" class="muted" role="status"></p>
