@@ -392,7 +392,7 @@ body > header{display:none!important;}
    Les écrans d’inscription, de compte client et d’administration restent disponibles dans leurs parcours respectifs. */
 body:has(#loginPanel:not(.hidden)) main > #loginPanel ~ * { display:none !important; }
 body:has(#loginPanel:not(.hidden)) #contactFooter,
-body:has(#loginPanel:not(.hidden)) #whatsappHelp { display:none !important; }
+/* Le bouton WhatsApp reste visible aussi sur la page de connexion. */
 </style>
 </head>
 <body>
