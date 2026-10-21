@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - "package.json"
+      - "index.html"
       - "capacitor.config.json"
       - "www/**"
       - "resources/**"
