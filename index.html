@@ -1443,13 +1443,19 @@ async function resetClientPin(clientId, clientPhone) {
   } catch (err) { alert('Échec de la réinitialisation : ' + (err.message || 'erreur inconnue')); }
 }
 async function deleteClientAccount(clientId) {
+  if (!clientId) { alert('Aucun compte client sélectionné.'); return; }
   if (!confirm('Confirmer la suppression de ce compte client ?\n\nPour préserver les données financières, cette action désactive le compte et conserve son historique.')) return;
-  if (prompt('Pour confirmer, écris DESACTIVER :') !== 'DESACTIVER') { alert('Action annulée.'); return; }
   try {
-    await e31AdminRequest({ action: 'admin_delete_client_account', client_id: clientId, confirm_delete: true });
-    alert('Compte désactivé. L’historique financier est conservé.');
+    const result = await e31AdminRequest({
+      action: 'admin_delete_client_account',
+      client_id: clientId,
+      confirm_delete: true
+    });
+    alert(result.message || 'Compte désactivé. L’historique financier est conservé.');
     await loadAdminClients();
-  } catch (err) { alert('Échec de la suppression : ' + (err.message || 'erreur inconnue')); }
+  } catch (err) {
+    alert('Échec de la suppression : ' + (err.message || 'erreur inconnue'));
+  }
 }
 async function reactivateClientAccount(clientId) {
   if (!confirm('Réactiver ce compte client ?')) return;
