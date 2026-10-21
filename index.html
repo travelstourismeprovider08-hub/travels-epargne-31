@@ -554,7 +554,7 @@ body:has(#loginPanel:not(.hidden)) #whatsappHelp { display:none !important; }
 <g fill="url(#te31dashgold)" stroke="#0b1b35" stroke-width="1"><ellipse cx="28" cy="76" rx="7" ry="3.2"/><path d="M21 76v5q7 5 14 0v-5q-7 5-14 0Z"/><ellipse cx="28" cy="76" rx="7" ry="3.2"/><ellipse cx="42" cy="72" rx="7" ry="3.2"/><path d="M35 72v5q7 5 14 0v-5q-7 5-14 0Z"/><ellipse cx="42" cy="72" rx="7" ry="3.2"/></g>
 <path d="M54 80 L68 69 L72 73 L82 59" fill="none" stroke="#ff9418" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M76 59h6v6" fill="none" stroke="#ff9418" stroke-width="3" stroke-linecap="round"/>
 </svg></div><div><strong>TRAVELS Épargne 31</strong><small>Épargner aujourd'hui pour voyager demain</small></div></div>
-  <div class="te31-top-actions"><button type="button" class="te31-icon-btn" onclick="openHistory('deposits')" aria-label="Notifications" title="Notifications">🔔</button><button type="button" class="te31-icon-btn" onclick="goToAccount()" aria-label="Mon profil" title="Mon profil">👤</button></div>
+  <div class="te31-top-actions"><button type="button" class="te31-icon-btn" onclick="openNotifications()" aria-label="Notifications" title="Notifications">🔔</button><button type="button" class="te31-icon-btn" onclick="goToAccount()" aria-label="Mon profil" title="Mon profil">👤</button></div>
 </div>
 <section class="te31-balance" aria-label="Solde de mon épargne">
   <div class="te31-wallet" aria-hidden="true">▣</div><div class="te31-flight-lines" aria-hidden="true"></div>
@@ -610,6 +610,7 @@ body:has(#loginPanel:not(.hidden)) #whatsappHelp { display:none !important; }
     <div class="te31-form-actions"><button type="submit">Envoyer la demande</button><button type="button" class="secondary" onclick="closeWithdrawalPanel()">Annuler</button></div><p id="te31WithdrawalStatus" class="muted" role="status"></p>
   </form>
 </section>
+<section id="te31Notifications" class="te31-history" style="margin-top:15px"><div class="te31-section-heading"><div><h3>🔔 Mes notifications</h3><p>Confirmations et refus de vos opérations</p></div><button type="button" class="te31-icon-btn" style="flex:0 0 42px" onclick="loadClientDashboard(true)" aria-label="Actualiser les notifications">↻</button></div><div id="te31NotificationList" class="te31-history-list"><div class="te31-empty">Les changements de statut apparaîtront ici.</div></div></section>
 <section id="te31History" class="te31-history">
   <div class="te31-section-heading"><div><h3>Historique</h3><p>Consultez vos dépôts et vos retraits par cycles</p></div><button type="button" class="te31-icon-btn" style="flex:0 0 42px" onclick="loadClientDashboard(true)" aria-label="Actualiser l'historique" title="Actualiser">↻</button></div>
   <div class="te31-tabs"><button id="te31DepositsTab" class="te31-tab active" type="button" onclick="openHistory('deposits')">Dépôts journaliers <span id="te31DepositCount">0</span></button><button id="te31WithdrawalsTab" class="te31-tab" type="button" onclick="openHistory('withdrawals')">Retraits par cycles <span id="te31WithdrawalCount">0</span></button></div>
@@ -929,6 +930,7 @@ async function loadClientDashboard(showStatus=false){
   // Un administrateur peut aussi consulter son propre compte d’épargne.
   if(data.admin&&Array.isArray(data.self_savings))data.savings=data.self_savings;
   te31DashboardData=data;
+  try{te31ProcessNotifications(data);}catch(e){console.error('Notifications:',e);}
   const a=Array.isArray(data.savings)?data.savings[0]:null;
   if(a){
    const previous=get()||{};
@@ -1015,6 +1017,39 @@ async function shareTe31Referral(){
   else{await copyTe31Referral();}
  }catch(error){if(error?.name!=='AbortError')await copyTe31Referral();}
 }
+
+function te31ProcessNotifications(data){
+ const id=String((Array.isArray(data?.savings)?data.savings[0]?.id:null)||get()?.id||data?.profile?.id||'account');
+ const sk='te31_notification_state_'+id,nk='te31_notifications_'+id;
+ let old=null,notes=[];try{old=JSON.parse(localStorage.getItem(sk)||'null');notes=JSON.parse(localStorage.getItem(nk)||'[]');if(!Array.isArray(notes))notes=[];}catch(_){}
+ const rows=[];
+ te31DepositRows(data).forEach(r=>rows.push({id:'d:'+r.id,kind:'versement',status:String(r.status||'').toLowerCase(),amount:Number(r.amount||0)}));
+ (data?.withdrawals||[]).forEach(w=>rows.push({id:'w:'+w.id,kind:'retrait',status:String(w.status||'').toLowerCase(),amount:Number(w.amount||0)}));
+ const current={};
+ rows.forEach(r=>{
+  current[r.id]={status:r.status,amount:r.amount};
+  const prior=old?.[r.id];if(!prior||prior.status===r.status)return;
+  const terminal=['confirmed','validated','validé','effectué','effectue','paid','completed','success','approved','approuvé','approuve','rejected','failed','refused','refusé','refuse'];
+  if(!terminal.includes(r.status)||terminal.includes(String(prior.status||'').toLowerCase()))return;
+  const rejected=['rejected','failed','refused','refusé','refuse'].includes(r.status);
+  const approved=['approved','approuvé','approuve','validated','validé'].includes(r.status);
+  let message;
+  if(r.kind==='versement')message=rejected?'Votre versement de '+te31Money(r.amount)+' a été refusé. Contactez la gestion si nécessaire.':'Votre versement de '+te31Money(r.amount)+' a été confirmé.';
+  else message=rejected?'Votre demande de retrait de '+te31Money(r.amount)+' a été refusée. Contactez la gestion.':approved?'Votre demande de retrait de '+te31Money(r.amount)+' a été validée ; le paiement reste à effectuer.':'Votre retrait de '+te31Money(r.amount)+' a été marqué comme effectué.';
+  notes.unshift({id:r.id+':'+r.status,kind:r.kind,message,status:r.status,date:new Date().toISOString()});
+ });
+ notes=notes.slice(0,20);
+ try{localStorage.setItem(sk,JSON.stringify(current));localStorage.setItem(nk,JSON.stringify(notes));}catch(_){}
+}
+function renderTe31Notifications(){
+ const x=get(),box=$('te31NotificationList');if(!box)return;
+ let notes=[];try{notes=JSON.parse(localStorage.getItem('te31_notifications_'+String(x?.id||'account'))||'[]');}catch(_){}
+ box.innerHTML=notes.length?notes.map(n=>{
+  const bad=/refusé|refuse/i.test(n.message||'');
+  return '<article class="te31-operation"><span class="te31-op-icon '+(bad?'withdraw':'deposit')+'">'+(bad?'!':'✓')+'</span><div class="te31-op-main"><b>'+te31Esc(n.kind==='retrait'?'Notification de retrait':'Notification de versement')+'</b><small>'+te31Esc(te31Date(n.date))+'</small><small>'+te31Esc(n.message)+'</small></div><span class="te31-status '+(bad?'bad':'ok')+'">'+te31Esc(n.status||'Mis à jour')+'</span></article>';
+ }).join(''):'<div class="te31-empty">Aucune nouvelle notification pour le moment. Actualisez votre compte pour vérifier les mises à jour.</div>';
+}
+function openNotifications(){const p=$('te31Notifications');if(p)p.scrollIntoView({behavior:'smooth',block:'start'});loadClientDashboard(false).catch(()=>{});}
 function renderTe31Dashboard(){
  const x=get();const data=te31DashboardData;
  if(!x)return;
@@ -1034,6 +1069,7 @@ function renderTe31Dashboard(){
  $('te31GoalProgress').parentElement.setAttribute('aria-valuenow',String(progress));
  $('te31GoalCaption').textContent='Objectif : '+te31Money(goal);
  $('te31AccountSummary').innerHTML='<div class="row"><div class="stat">Nom complet<b>'+te31Esc(x.name)+'</b></div><div class="stat">Téléphone<b>'+te31Esc(x.phone)+'</b></div></div><div class="row" style="margin-top:9px"><div class="stat">Cotisation quotidienne<b>'+te31Money(x.daily)+'</b></div><div class="stat">Objectif<b>'+te31Money(x.goal)+'</b></div></div>';
+ renderTe31Notifications();
  const deposits=te31DepositRows(data);
  const confirmed=deposits.filter(r=>te31Status(r.status).paid);
  const pendingPayments=deposits.filter(r=>!te31Status(r.status).paid);
