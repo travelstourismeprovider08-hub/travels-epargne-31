@@ -1041,7 +1041,7 @@ function renderTe31Dashboard(){
  $('te31DepositsTotal').textContent=te31Money(confirmed.reduce((sum,r)=>sum+r.amount,0));
  $('te31DepositsList').innerHTML=deposits.length?deposits.map(r=>{
   const st=te31Status(r.status),provider=({wave:'Wave',orange_money:'Orange Money',mtn_momo:'MTN MoMo'})[String(r.provider).toLowerCase()]||r.provider||'Moyen non renseigné';
-  const receiptButton=st.paid?'<button type="button" class="te31-receipt-button" onclick="printTe31Receipt(\''+te31Esc(r.id)+'\\')">Imprimer le reçu</button>':'';
+  const receiptButton=st.paid?'<button type="button" class="te31-receipt-button" onclick="printTe31Receipt(&quot;'+te31Esc(r.id)+'&quot;)">Imprimer le reçu</button>':'';
   return '<article class="te31-operation te31-deposit-operation"><small class="te31-deposit-date">'+te31Esc(te31Date(r.date))+'</small><span class="te31-op-icon te31-deposit-plus">+</span><div class="te31-deposit-label"><b>Dépôt quotidien</b><small>'+te31Esc(provider)+(r.reference?' · Réf. '+te31Esc(r.reference):'')+'</small></div><strong class="te31-deposit-amount">+'+te31Money(r.amount)+'</strong><span class="te31-status '+st.cls+'">'+te31Esc(st.label)+'</span>'+receiptButton+'</article>';
  }).join(''):'<div class="te31-empty">Aucun dépôt enregistré dans Supabase pour le moment. Aucun dépôt fictif n’est affiché.</div>';
  const withdrawals=(data?.withdrawals||[]).slice().sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
