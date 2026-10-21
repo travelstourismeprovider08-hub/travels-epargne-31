@@ -1,0 +1,13 @@
+{
+  "appId": "ci.travels.epargne31",
+  "appName": "T.E-31",
+  "webDir": "www",
+  "server": {
+    "url": "https://travels-tourisme-provider-pargne.vercel.app",
+    "cleartext": false,
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}
