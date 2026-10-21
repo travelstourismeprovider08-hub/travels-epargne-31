@@ -573,6 +573,16 @@ body:has(#loginPanel:not(.hidden)) #whatsappHelp { display:none !important; }
   <button type="button" class="te31-action" onclick="openHistory('deposits')"><span class="te31-action-icon">▤</span><span><b>Historique</b><small>Voir les opérations</small></span></button>
   <button type="button" class="te31-action" onclick="goToAccount()"><span class="te31-action-icon">♙</span><span><b>Mon compte</b><small>Mes informations</small></span></button>
 </div>
+<section id="te31ReferralPanel" class="te31-form-panel">
+  <h3>👥 Parrainez et gagnez !</h3>
+  <div class="promo-rate">50 % de la cotisation journalière</div>
+  <p>Invitez vos proches à épargner avec T.E-31. Lorsque votre filleul termine son cycle de 31 jours, vous, en tant que parrain, recevez les 50 % de la cotisation journalière de votre filleul.</p>
+  <p class="muted">Votre code personnel : <strong id="te31ReferralCode">Chargement…</strong></p>
+  <label for="te31ReferralLink">Votre lien de parrainage</label>
+  <input id="te31ReferralLink" type="url" readonly aria-label="Lien de parrainage à partager">
+  <div class="te31-form-actions"><button type="button" onclick="shareTe31Referral()">Partager le lien</button><button type="button" class="secondary" onclick="copyTe31Referral()">Copier le lien</button></div>
+  <p id="te31ReferralStatus" class="muted" role="status">Partagez ce lien avec vos proches pour qu’ils s’inscrivent avec votre code.</p>
+</section>
 <section id="te31DepositPanel" class="te31-form-panel hidden">
   <h3>Faire un dépôt</h3><p class="muted">Étape 1 : effectuez le transfert dans Wave ou Orange Money vers le compte marchand T.E-31 communiqué par la gestion. Étape 2 : saisissez ci-dessous le montant et la référence figurant sur le reçu. Votre demande sera enregistrée dans Supabase ; le solde ne sera crédité qu’après vérification du paiement par la gestion. Ce formulaire ne déclenche pas encore un paiement automatique.</p>
   <form id="te31DepositForm">
@@ -774,6 +784,7 @@ async function createAccount(){
       headers:{'Content-Type':'application/json','apikey':'sb_publishable_7wuwoi_p6C4_xnITBLsOxA_6b6PDDbm'},
       body:JSON.stringify({
         action:'register',
+        referral_code:(new URLSearchParams(window.location.search).get('parrain')||'').trim().toUpperCase(),
         full_name:name,
         phone,
         pin,
@@ -817,6 +828,9 @@ function showRegistration(){
   $('signup').classList.remove('hidden');
   $('name').focus();
   window.scrollTo({top:0,behavior:'smooth'});
+}
+if(new URLSearchParams(window.location.search).has('parrain')){
+  showRegistration();
 }
 $('clientLoginForm').addEventListener('submit', async function(event){
   event.preventDefault();
@@ -964,9 +978,40 @@ function te31WithdrawalStatus(value){
  if(['rejected','failed','refused','refusé','refuse'].includes(v))return {label:'Refusé',cls:'bad',paid:false};
  return {label:value||'Statut non renseigné',cls:'',paid:false};
 }
+function renderTe31Referral(){
+ const profile=te31DashboardData?.profile;
+ const code=String(profile?.referral_code||'').trim();
+ const codeEl=$('te31ReferralCode'),linkEl=$('te31ReferralLink'),statusEl=$('te31ReferralStatus');
+ if(!code){if(codeEl)codeEl.textContent='Code indisponible';if(statusEl)statusEl.textContent='Impossible de charger le code de parrainage. Actualisez votre compte.';return;}
+ const url=new URL(window.location.href);
+ url.search='';
+ url.hash='signup';
+ url.searchParams.set('parrain',code);
+ if(codeEl)codeEl.textContent=code;
+ if(linkEl)linkEl.value=url.toString();
+ if(statusEl)statusEl.textContent='Partagez ce lien avec vos proches. La récompense sera due après validation du cycle complet de 31 jours.';
+}
+async function copyTe31Referral(){
+ const input=$('te31ReferralLink'),status=$('te31ReferralStatus');
+ if(!input?.value){if(status)status.textContent='Le lien de parrainage n’est pas encore disponible.';return;}
+ try{
+  if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(input.value);}
+  else{input.focus();input.select();if(!document.execCommand('copy'))throw new Error('copy failed');}
+  if(status)status.textContent='Lien de parrainage copié. Vous pouvez l’envoyer à vos proches.';
+ }catch(_){input.focus();input.select();if(status)status.textContent='Sélectionnez le lien puis copiez-le manuellement.';}
+}
+async function shareTe31Referral(){
+ const input=$('te31ReferralLink'),status=$('te31ReferralStatus');
+ if(!input?.value){if(status)status.textContent='Le lien de parrainage n’est pas encore disponible.';return;}
+ try{
+  if(navigator.share){await navigator.share({title:'T.E-31 — Parrainage',text:'Invitez vos proches à épargner avec T.E-31.',url:input.value});}
+  else{await copyTe31Referral();}
+ }catch(error){if(error?.name!=='AbortError')await copyTe31Referral();}
+}
 function renderTe31Dashboard(){
  const x=get();const data=te31DashboardData;
  if(!x)return;
+ renderTe31Referral();
  const balance=Number(x.paid||0);
  $('te31BalanceAmount').textContent=te31Money(balance);
  $('te31BalanceFoot').textContent='Objectif : '+te31Money(x.goal)+' · '+Math.min(100,Math.round(balance/Math.max(1,Number(x.goal||0))*100))+'% atteint';
