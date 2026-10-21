@@ -152,7 +152,7 @@ body > header{display:none!important;}
 .te31-op-right strong.withdraw{color:#f58220}
 .te31-status{display:inline-block;margin-top:3px;padding:3px 7px;border-radius:20px;background:#eef2f7;color:#475569;font-size:10px;font-weight:800}
 .te31-status.ok{background:#e6f8ed;color:#167442}.te31-status.wait{background:#fff3d8;color:#9a5a00}.te31-status.bad{background:#ffe7e7;color:#a61b1b}
-.te31-empty{padding:20px 12px;text-align:center;border:1px dashed #d8e1ec;border-radius:14px;color:#718096;font-size:13px}
+.te31-empty{padding:20px 12px;text-align:center;border:1px dashed #d8e1ec;border-radius:14px;color:#718096;font-size:13px}.te31-receipt-button{grid-column:2/-1;width:auto;justify-self:start;min-height:34px;margin:0;padding:7px 12px;background:#0b1b35;color:#d4af37;border:1px solid #d4af37;border-radius:9px;box-shadow:none;font-size:12px}
 .te31-rules{margin:14px 0 0;padding:16px;border:1px solid #d4af3766;border-radius:18px;background:#0b1b35;color:#fff;font-size:13px}
 .te31-rules b{display:block;color:#d4af37;margin-bottom:8px}.te31-rules p{margin:6px 0}
 .te31-form-panel{margin:14px 0;padding:18px;border-radius:20px;border:1px solid #d4af3766;background:#fff}
@@ -1041,7 +1041,8 @@ function renderTe31Dashboard(){
  $('te31DepositsTotal').textContent=te31Money(confirmed.reduce((sum,r)=>sum+r.amount,0));
  $('te31DepositsList').innerHTML=deposits.length?deposits.map(r=>{
   const st=te31Status(r.status),provider=({wave:'Wave',orange_money:'Orange Money',mtn_momo:'MTN MoMo'})[String(r.provider).toLowerCase()]||r.provider||'Moyen non renseigné';
-  return '<article class="te31-operation te31-deposit-operation"><small class="te31-deposit-date">'+te31Esc(te31Date(r.date))+'</small><span class="te31-op-icon te31-deposit-plus">+</span><div class="te31-deposit-label"><b>Dépôt quotidien</b><small>'+te31Esc(provider)+(r.reference?' · Réf. '+te31Esc(r.reference):'')+'</small></div><strong class="te31-deposit-amount">+'+te31Money(r.amount)+'</strong><span class="te31-status '+st.cls+'">'+te31Esc(st.label)+'</span></article>';
+  const receiptButton=st.paid?'<button type="button" class="te31-receipt-button" onclick="printTe31Receipt(\\''+te31Esc(r.id)+'\\')">Imprimer le reçu</button>':'';
+  return '<article class="te31-operation te31-deposit-operation"><small class="te31-deposit-date">'+te31Esc(te31Date(r.date))+'</small><span class="te31-op-icon te31-deposit-plus">+</span><div class="te31-deposit-label"><b>Dépôt quotidien</b><small>'+te31Esc(provider)+(r.reference?' · Réf. '+te31Esc(r.reference):'')+'</small></div><strong class="te31-deposit-amount">+'+te31Money(r.amount)+'</strong><span class="te31-status '+st.cls+'">'+te31Esc(st.label)+'</span>'+receiptButton+'</article>';
  }).join(''):'<div class="te31-empty">Aucun dépôt enregistré dans Supabase pour le moment. Aucun dépôt fictif n’est affiché.</div>';
  const withdrawals=(data?.withdrawals||[]).slice().sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
  const paidWithdrawals=withdrawals.filter(w=>te31WithdrawalStatus(w.status).paid);
@@ -1054,6 +1055,19 @@ function renderTe31Dashboard(){
   const durationText=duration?String(duration)+' jours':'Cycle de 31 jours';
   const withdrawalStatus=st.label; return '<article class="te31-operation"><span class="te31-op-icon withdraw">↗</span><div class="te31-op-main"><b>Retrait · '+cycleText+'</b><small>'+te31Esc(te31Date(w.created_at))+'</small><small>'+te31Esc(durationText)+(w.payout_method?' · '+te31Esc(w.payout_method):'')+'</small></div><div class="te31-op-right"><strong class="withdraw">−'+te31Money(w.amount)+'</strong><span class="te31-status '+st.cls+'">'+te31Esc(withdrawalStatus)+'</span></div></article>';
  }).join(''):'<div class="te31-empty">Aucune demande de retrait enregistrée pour le moment.</div>';
+}
+function printTe31Receipt(operationId){
+ const data=te31DashboardData;
+ const row=te31DepositRows(data).find(item=>String(item.id)===String(operationId));
+ if(!row||!te31Status(row.status).paid){alert('Reçu indisponible : ce versement doit d’abord être confirmé par la gestion.');return;}
+ const x=get()||{},provider=({wave:'Wave',orange_money:'Orange Money',mtn_momo:'MTN MoMo'})[String(row.provider||'').toLowerCase()]||row.provider||'Non renseigné';
+ const safe=value=>String(value??'—').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ const receiptNo=String(row.reference||row.id||'T.E-31').slice(0,80);
+ const win=window.open('','_blank','width=720,height=800');
+ if(!win){alert('Autorisez la fenêtre d’impression pour ouvrir votre reçu.');return;}
+ win.document.write('<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Reçu T.E-31</title><style>body{font-family:Arial,sans-serif;color:#0b1b35;margin:32px}.head{background:#0b1b35;color:#fff;padding:24px;border-radius:14px}.head h1{margin:0;color:#ff9418}.head p{margin:6px 0 0}.receipt{border:1px solid #d4af37;border-radius:14px;padding:22px;margin-top:20px}.row{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #e5e7eb;padding:12px 0}.row strong{text-align:right}.amount{font-size:26px;color:#0b7a43;font-weight:bold;margin:20px 0}.note{font-size:12px;color:#64748b;margin-top:20px}@media print{button{display:none}body{margin:0}}</style></head><body><div class="head"><h1>TRAVELS Épargne 31</h1><p>Reçu de versement confirmé</p></div><div class="receipt"><div class="row"><span>Client</span><strong>'+safe(x.name||'Client')+'</strong></div><div class="row"><span>Téléphone</span><strong>'+safe(x.phone||'—')+'</strong></div><div class="row"><span>Date de l’opération</span><strong>'+safe(te31Date(row.date))+'</strong></div><div class="row"><span>Moyen de paiement</span><strong>'+safe(provider)+'</strong></div><div class="row"><span>Référence de transaction</span><strong>'+safe(receiptNo)+'</strong></div><div class="amount">Montant confirmé : '+safe(te31Money(row.amount))+'</div><div class="row"><span>Statut</span><strong>CONFIRMÉ</strong></div><p class="note">Ce reçu confirme l’enregistrement du versement dans T.E-31 après vérification par la gestion. Conservez-le pour vos dossiers.</p></div><p><button onclick="window.print()">Imprimer / Enregistrer en PDF</button></p></body></html>');
+ win.document.close();
+ win.focus();
 }
 function openHistory(mode){
  te31HistoryMode=mode==='withdrawals'?'withdrawals':'deposits';
